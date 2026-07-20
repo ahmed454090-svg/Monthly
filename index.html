@@ -12,7 +12,7 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; }
         .card-glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(0, 0, 0, 0.04); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
         .total-card { background: linear-gradient(135deg, #ecfdf5 0%, #dcfce7 100%); border: 1px solid rgba(16, 185, 129, 0.1); }
-        .atm-card { background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%); color: white; border-radius: 24px; padding: 24px; position: relative; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+        .notice-card { background: linear-gradient(145deg, #fef3c7 0%, #fde68a 100%); color: #78350f; border-radius: 24px; padding: 24px; position: relative; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); border: 1px solid rgba(245, 158, 11, 0.2); }
         .scroll-container { background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%); border: 1px solid #e2e8f0; }
         #members-list::-webkit-scrollbar { width: 4px; }
         #members-list::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
@@ -47,17 +47,14 @@
             </div>
         </div>
 
-        <div class="atm-card mt-2">
-            <div class="flex justify-between items-start mb-8">
-                <i class="fas fa-sim-card text-2xl text-amber-500"></i>
-                <span class="font-bold tracking-widest text-[10px] opacity-60">HBL KONNECT</span>
+        <div class="notice-card mt-2">
+            <div class="flex items-center gap-3 mb-3">
+                <i class="fas fa-bell text-amber-600"></i>
+                <h4 class="font-bold uppercase tracking-widest text-xs">Important Notice</h4>
             </div>
-            <div class="space-y-1">
-                <p class="text-[10px] uppercase tracking-widest opacity-50">Account Title</p>
-                <p class="font-semibold text-lg">Afzaal Ahmed</p>
-                <p class="text-[10px] uppercase tracking-widest opacity-50 mt-4">Account Number</p>
-                <p class="font-mono text-xl tracking-wider font-medium">0342-2735966</p>
-            </div>
+            <p class="text-xs leading-relaxed opacity-90">
+                Allah pak hamari is koshish ko qabool farmaye. Yah sab karne k liye ap bhaio ka sath aur ehtamad ki hamin sab se ziyada zarorat hai, aur Allah pak hamin is per sabit qadam rehny ki toufeeq attaa farmaye.
+            </p>
         </div>
 
         <div class="text-center opacity-30 text-[9px] font-bold uppercase tracking-[0.2em] mt-8">
