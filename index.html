@@ -1,171 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FTCF Professional Portal</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Noto+Nastaliq+Urdu&display=swap');
-    body { font-family: 'Poppins', sans-serif; background-color: #f8fafc; }
-    .urdu-text { font-family: 'Noto Nastaliq Urdu', serif; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FTCF | Member Ledger</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;600;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; }
+        .card-glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(0, 0, 0, 0.04); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+        .total-card { background: linear-gradient(135deg, #ecfdf5 0%, #dcfce7 100%); border: 1px solid rgba(16, 185, 129, 0.1); }
+        .atm-card { background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%); color: white; border-radius: 24px; padding: 24px; position: relative; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+        .scroll-container { background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%); border: 1px solid #e2e8f0; }
+        #members-list::-webkit-scrollbar { width: 4px; }
+        #members-list::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
+    </style>
 </head>
 <body class="pb-10">
 
-  <main class="max-w-md mx-auto p-4 space-y-6">
-    <!-- Header -->
-    <div class="flex justify-between items-center py-4">
-        <h1 class="font-bold text-2xl text-gray-800 tracking-tight">Rules & Loans</h1>
-        <div class="w-10 h-10 bg-emerald-600 rounded-full flex items-center justify-center text-white font-bold shadow-md">F</div>
-    </div>
+    <header class="p-8 pb-24 bg-slate-900 text-white rounded-b-[2.5rem] shadow-xl text-center">
+        <h1 class="text-2xl font-extrabold tracking-tight">Family Trust & Care Foundation</h1>
+        <p class="text-amber-400 font-medium mt-1 text-sm tracking-wide opacity-90">"Amanat me khiyanat nahi,Behtreen Nizam Asal Kamyabi"</p>
+    </header>
 
-    <!-- Stats -->
-    <div class="grid grid-cols-3 gap-3">
-        <div class="col-span-3 bg-gradient-to-br from-emerald-800 to-emerald-950 p-6 rounded-3xl text-white shadow-lg text-center">
-            <p class="text-emerald-300 text-xs uppercase tracking-widest mb-1">Active Loans</p>
-            <h2 class="font-bold text-3xl">0</h2>
+    <main class="max-w-xl mx-auto px-4 -mt-16 space-y-6">
+        <div class="total-card p-6 rounded-3xl text-center shadow-sm">
+            <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-600 opacity-70">Total Contribution</p>
+            <h2 id="grand-total" class="text-3xl font-extrabold mt-2 text-emerald-900 tracking-tight">Rs. 0</h2>
         </div>
-        <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm text-center">
-            <p class="text-[10px] text-gray-400 uppercase">Inflow</p>
-            <p class="font-bold text-emerald-600 text-sm">Rs. 11,500</p>
+
+        <section>
+            <h3 class="text-[10px] font-bold uppercase tracking-[0.2em] opacity-40 mb-3 ml-1 text-slate-500">Members List</h3>
+            <div id="members-list" class="scroll-container grid grid-cols-2 gap-3 max-h-[350px] overflow-y-auto p-4 rounded-3xl shadow-inner"></div>
+        </section>
+
+        <!-- History Modal -->
+        <div id="modal" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center p-4 z-50">
+            <div class="bg-white p-6 rounded-3xl w-full max-w-sm max-h-[80vh] flex flex-col">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 id="modal-name" class="font-bold text-slate-900"></h3>
+                    <button onclick="document.getElementById('modal').classList.add('hidden')" class="text-slate-400 hover:text-slate-900"><i class="fas fa-times"></i></button>
+                </div>
+                <div id="history-data" class="space-y-2 overflow-y-auto pr-2"></div>
+            </div>
         </div>
-        <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm text-center">
-            <p class="text-[10px] text-gray-400 uppercase">Outflow</p>
-            <p class="font-bold text-red-500 text-sm">Rs. 0</p>
+
+        <div class="atm-card mt-2">
+            <div class="flex justify-between items-start mb-8">
+                <i class="fas fa-sim-card text-2xl text-amber-500"></i>
+                <span class="font-bold tracking-widest text-[10px] opacity-60">HBL KONNECT</span>
+            </div>
+            <div class="space-y-1">
+                <p class="text-[10px] uppercase tracking-widest opacity-50">Account Title</p>
+                <p class="font-semibold text-lg">Afzaal Ahmed</p>
+                <p class="text-[10px] uppercase tracking-widest opacity-50 mt-4">Account Number</p>
+                <p class="font-mono text-xl tracking-wider font-medium">0342-2735966</p>
+            </div>
         </div>
-    </div>
 
-    <!-- New Button & Scrollable Box -->
-    <div class="space-y-3">
-        <button onclick="document.getElementById('missionBox').classList.toggle('hidden')" class="w-full bg-emerald-600 text-white p-3 rounded-xl font-bold text-sm shadow-md hover:bg-emerald-700 transition">
-            <i class="fas fa-book-open mr-2"></i> Read Mission & Vision
-        </button>
-        <div id="missionBox" class="hidden bg-green-500 p-6 rounded-3xl shadow-sm border border-gray-100 urdu-text text-right h-80 overflow-y-auto">
-            <p class="text-sm text-black leading-relaxed whitespace-pre-line">
-                ہمارا ہدف: مغل برادرز نیٹ ورک کو مثالی بنانا
-                ہمارا عزم ہے کہ ہم نے اپنے علاقے میں "مغل برادرز نیٹ ورک" کو ایک مثالی نیٹ ورک بنانا ہے، تاکہ لوگ ہمارے اس فلاحی نظام اور بھائی چارے کی مثال دیں اور ہمارا یہ سیٹ اپ دوسروں کے لیے بھی ایک رول ماڈل بن کر ابھرے۔
-
-                یہ ہم سب کی فاؤنڈیشن ہے (ہمارا عہد)
-                یہ فاؤنڈیشن ہم سب بھائیوں اور ممبران کی اپنی مشترکہ فاؤنڈیشن ہے اور ہم سب نے ہی مل کر اسے کامیاب بنانا ہے۔ اس کا سب سے بڑا مقصد یہ ہے کہ کل کو ہمارا کوئی بھی بھائی یا فیملی ممبر کسی بھی مصیبت، پریشانی یا ضرورت کے وقت خود کو اکیلا نہ پائے۔ جب ہم سب ایک دوسرے کا بازو بنیں گے، تو ہر مشکل آسان ہو جائے گی۔
-
-                ہمارا وژن: خاندان سے آگے، ایک رجسٹرڈ ادارہ
-                ہم اس فاؤنڈیشن کو صرف اپنے خاندان تک محدود نہیں رکھنا چاہتے۔ ہمارا اصل مقصد اور عزم یہ ہے کہ آگے چل کر ہم اسے باقاعدہ ایک رجسٹرڈ آرگنائزیشن (NGO) بنائیں گے، تاکہ دائرہ کار کو وسیع کر کے ہر بے سہارا اور مددگار کا حقیقی سہارا بن سکیں اور وسیع پیمانے پر لوگوں کی خدمت کر سکیں۔
-
-                آپ کا ساتھ اور اعتماد (سب سے بڑی طاقت)
-                یہ سب کچھ کرنے کے لیے اور فاؤنڈیشن کو اس کے اصل مقام تک پہنچانے کے لیے، ہمیں آپ سب بھائیوں کے ساتھ، تعاون اور اعتماد کی سب سے زیادہ ضرورت ہے۔ آپ بھائیوں کا یہ بھروسہ ہی ہماری سب سے بڑی طاقت ہے جو ہمیں آگے بڑھنے اور اس نظام کو مضبوط بنانے کا حوصلہ دیتا ہے۔
-
-                کا بنیادی مقصد (اصل مقصد) FTCF
-                خاندان میں شفافیت، برابری اور اجتماعی مدد کا ایسا نظام قائم کرنا جہاں:
-                مشکل وقت، بیماری، شادی بیاہ یا کسی بھی ایمرجنسی میں خاندان کے کسی رکن کو باہر کسی کے آگے ہاتھ نہ پھیلانا پڑے اور نہ ہی ادھار لینا پڑے۔
-                تمام ممبران مل کر جو ماہانہ فنڈ جمع کرتے ہیں، اس کا مقصد ایک مضبوط فیملی بینک بنانا ہے تاکہ ضرورت کے وقت فوری اور باعزت طریقے سے مالی تعاون فراہم کیا جا سکے۔ اس نظام کی اصل کامیابی سب کا ایک ساتھ کھڑا ہونا ہے۔
-
-                فنڈ کی 4 اہم کیٹیگریز (Fund Allocation)
-                جمع ہونے والی رقم کو فارمولے کے تحت ان 4 حصوں میں تقسیم رکھا جاتا ہے، جو بینک بیلنس کے مضبوط ہونے کے ساتھ ترتیب وار ان لاک کی جائیں گی:
-                1۔ ڈیتھ اسسٹنس (Death Assistance) — 30% (اپریل 2027 سے فعال)
-                خاندان میں کسی بھی فوتگی کی صورت میں ایمرجنسی اخراجات اور تدفین کے لیے فوری مدد۔
-                2۔ میڈیکل ایڈ (Medical Aid) — 25%
-                ممبر یا فیملی کے علاج معالجے اور ہسپتال کے اخراجات کے لیے۔
-                3۔ میرج سپورٹ (Marriage Support) — 25%
-                بچوں، بہنوں یا بھائیوں کی شادی بیاہ کے اخراجات میں مالی تعاون۔
-                4۔ ایمرجنسی ریزرو (Emergency Reserve) — 20%
-                ناگہانی ضرورت یا ہنگامی لون کے لیے محفوظ فنڈ۔
-                اہم اصول: فاؤنڈیشن کے فنڈ کو رواں رکھنے کے لیے یہ اصول لازمی ہے کہ کسی بھی ممبر کو اگلا لون یا بڑی مدد تبھی ملے گی جب ان کا پچھلا حساب کتاب بالکل کلیئر ہوگا، تاکہ نظام بغیر کسی رکاوٹ کے چلتا رہے۔
-
-                طویل مدتی منصوبہ اور کیٹیگریز کا ان لاک (Unlock) ہونا
-                ہمیں اپنے اس بڑے مقصد کو مکمل طور پر کامیاب کرنے میں کافی عرصہ لگ سکتا ہے، اس لیے ہم نے ایک مضبوط اور محفوظ حکمت عملی بنائی ہے:
-                اپریل 2027 سے ہم فاؤنڈیشن کی پہلی کیٹیگری (ڈیتھ اسسٹنس) کو باقاعدہ شروع کریں گے۔
-                اس کے بعد، جیسے جیسے فاؤنڈیشن کا بینک بیلنس مضبوط اور مستحکم ہوتا جائے گا، ہم باقی کیٹیگریز کو بھی ایک ایک کر کے ان لاک کرتے جائیں گے۔
-                الحمدللہ! اب سب کچھ موبائل ایپ پر لائیو ہے
-                ٹیکنالوجی کے لحاظ سے اب ہم مکمل طور پر ڈیجیٹل ہو چکے ہیں:
-                لائیو ایپ لانچ: فاؤنڈیشن کی آفیشل ایپ (PWA) الحمدللہ کامیابی سے لانچ ہو چکی ہے اور اب ہر بھائی کے موبائل میں موجود ہے۔
-                100% شفافیت: ہر ممبر اپنے موبائل سے ہی اپنا لیجر، جمع شدہ فنڈ کا سٹیٹس، اور فاؤنڈیشن کے قوانین لائیو چیک کر سکتا ہے۔ اب پورا حساب کتاب ہر وقت ہر بھائی کی نظر کے سامنے ہے۔
-
-                رمضان المبارک کا خصوصی ہدف (صدقات کے ذریعے امداد)
-                ہم نے یہ نیت اور عزم کیا ہے کہ آنے والے رمضان المبارک سے ہی ہم اس فاؤنڈیشن میں اپنے صدقات کی مدد سے، ہم سے جتنا ہو سکے گا، اتنی زیادہ سے زیادہ فیملیز (خاندانوں) کی بھرپور مدد کریں گے۔ اس مبارک مہینے کی برکت سے ہم فاؤنڈیشن کے دائرے کو مزید وسیع کریں گے تاکہ زیادہ سے زیادہ گھروں میں خوشیاں اور سکون لایا جا سکے۔
-
-                انشا اللہ، ایک دن ہم اپنے اس مقصد میں مکمل کامیاب ہوں گے، بس اس کے لیے آپ سب بھائیوں کا مستقل ساتھ اور تعاون درکار ہے۔
-
-                خصوصی دعا
-                اللہ پاک ہماری اس چھوٹی سی کوشش اور نیت کو اپنی بارگاہ میں قبول و منظور فرمائے، اس میں برکت عطا فرمائے، اور ہم سب کو اس نیک مقصد پر ہمیشہ متحد اور ثابت قدم رہنے کی توفیق عطا فرمائے۔ آمین یا رب العالمین!
-            </p>
+        <div class="text-center opacity-30 text-[9px] font-bold uppercase tracking-[0.2em] mt-8">
+            @FTCF2026 Founder Mughal Brothers
         </div>
-    </div>
+    </main>
 
-    <!-- Loan List -->
-    <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
-        <h3 class="font-bold text-gray-800 mb-4 flex items-center gap-2"><i class="fas fa-list text-emerald-700"></i> Loan Takers</h3>
-        <div id="loan-list" class="space-y-3 text-sm text-gray-600">
-             <div class="flex justify-between items-center border-b pb-2"><span>Member </span><span class="font-semibold text-gray-800">Rs. 0</span><span class="text-green-500 bg-green-50 px-2 py-0.5 rounded-full text-[10px] font-bold">PAID</span></div>
-             <div class="flex justify-between items-center border-b pb-2"><span>Member </span><span class="font-semibold text-gray-800">Rs. 0</span><span class="text-green-500 bg-green-50 px-2 py-0.5 rounded-full text-[10px] font-bold">PAID</span></div>
-             <div class="flex justify-between items-center border-b pb-2"><span>Member </span><span class="font-semibold text-gray-800">Rs. 0</span><span class="text-green-500 bg-green-50 px-2 py-0.5 rounded-full text-[10px] font-bold">PAID</span></div>
-        </div>
-    </div>
+    <script>
+        const mainSheet = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTtsZyNI2Ss1ACTIO7X1zAND4Q-mGhFdKSVcvx8amNxfGsFQfA2A7kBLHJgTJ9DGECqNNZ40iHW7zDc/pub?output=csv';
+        const historySheet = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTtsZyNI2Ss1ACTIO7X1zAND4Q-mGhFdKSVcvx8amNxfGsFQfA2A7kBLHJgTJ9DGECqNNZ40iHW7zDc/pub?gid=2038080316&single=true&output=csv';
+        
+        let historyData = [];
 
-    <!-- Loan Rules -->
-    <div class="space-y-3 urdu-text text-right">
-        <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
-            <h3 class="font-bold mb-2">Loan Rules</h3>
-            <p class="text-sm text-gray-600 leading-relaxed">امانت میں خیانت نہیں، ہمارا سب سے پہلا اصول ہے۔ بہترین نظام ہی اصل کامیابی ہے، اور اسے ہم سب نے مل کر- کر کے دکھانا ہے، ان شاء اللہ۔</p>
-        </div>
-        <div class="bg-white p-4 rounded-xl border border-gray-100 text-sm shadow-sm">دیا گیا قرض 6 ماہ میں آسان اقساط میں واپس کرنا ہو گا۔</div>
-        <div class="bg-white p-4 rounded-xl border border-gray-100 text-sm shadow-sm">پہلے لیا ہوا قرض واپس کیے جانے کے بعد نئی قسط جاری کی جائے گی۔</div>
-        <div class="bg-white p-4 rounded-xl border border-gray-100 text-sm shadow-sm">وفات کی صورت میں دی جانے والی رقم قرض نہیں ہو گی۔</div>
-    </div>
+        Promise.all([
+            fetch(mainSheet).then(res => res.text()),
+            fetch(historySheet).then(res => res.text())
+        ]).then(([mainCsv, historyCsv]) => {
+            const main = Papa.parse(mainCsv, {header: true, dynamicTyping: true}).data.filter(m => m.name);
+            historyData = Papa.parse(historyCsv, {header: true, dynamicTyping: true}).data;
 
-    <!-- Loan Application Form -->
-    <div class="bg-white p-6 rounded-3xl shadow-lg border border-gray-100">
-        <h3 class="font-bold text-gray-800 mb-4 text-center">Request New Loan</h3>
-        <form id="loanForm" class="space-y-3">
-            <input type="text" id="n" placeholder="Name" class="w-full p-3 rounded-xl bg-gray-50 border border-gray-200 focus:ring-2 focus:ring-emerald-500 outline-none transition" required>
-            <input type="number" id="a" placeholder="Amount" class="w-full p-3 rounded-xl bg-gray-50 border border-gray-200 focus:ring-2 focus:ring-emerald-500 outline-none transition" required>
-            <textarea id="r" placeholder="Reason" class="w-full p-3 rounded-xl bg-gray-50 border border-gray-200 focus:ring-2 focus:ring-emerald-500 outline-none transition" rows="3" required></textarea>
+            let grandTotal = main.reduce((sum, m) => sum + (m.fund || 0), 0);
+            document.getElementById('grand-total').innerText = "Rs. " + grandTotal.toLocaleString();
+
+            const list = document.getElementById('members-list');
+            main.forEach(m => {
+                const profilePic = m.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(m.name)}`;
+                list.innerHTML += `
+                    <div onclick="showHistory('${m.name}')" class="bg-white border border-slate-100 p-3 rounded-2xl flex items-center gap-3 cursor-pointer shadow-[0_2px_10px_-3px_rgba(15,23,42,0.1)] transition-all duration-300 hover:bg-slate-900 group">
+                        <img src="${profilePic}" class="w-10 h-10 rounded-full object-cover">
+                        <div class="overflow-hidden">
+                            <p class="text-[10px] font-bold text-slate-800 uppercase tracking-wide truncate group-hover:text-white">${m.name}</p>
+                            <p class="text-[10px] font-black text-emerald-600 group-hover:text-emerald-400">Rs. ${m.fund.toLocaleString()}</p>
+                        </div>
+                    </div>
+                `;
+            });
+        });
+
+        function showHistory(name) {
+            const memberHistory = historyData.filter(row => {
+                const values = Object.values(row);
+                return values[0] && values[0].toString().trim() === name.trim();
+            });
             
-            <button type="button" onclick="send(this)" class="w-full bg-emerald-900 hover:bg-emerald-800 text-white p-4 rounded-xl font-bold transition shadow-md">Submit Request</button>
-        </form>
-    </div>
-    
-    <!-- Email Display Element -->
-    <div class="text-center pt-2">
-        <a href="mailto:ftcf2026@example.com" class="text-emerald-800 font-semibold flex items-center justify-center gap-2 hover:underline">
-            <i class="fas fa-envelope"></i> ftcf.20@gmail.com
-        </a>
-    </div>
-
-    <!-- Footer Tag -->
-    <p class="text-center text-[10px] text-gray-400 pt-2">@FTCF2026 - Founders: Mughal Brothers</p>
-  </main>
-
-  <script>
-    function send(btn) {
-      const n = document.getElementById('n').value;
-      const a = document.getElementById('a').value;
-      const r = document.getElementById('r').value;
-      const date = new Date().toLocaleDateString();
-
-      // Validation
-      if (!n || !a || !r) {
-        alert("Please fill in all fields.");
-        return;
-      }
-
-      // Loading state
-      const originalText = btn.innerText;
-      btn.innerText = "Processing...";
-      btn.disabled = true;
-
-      const msg = `New Loan Application:%0ADate: ${date}%0AName: ${n}%0AAmount: ${a}%0AReason: ${r}`;
-      window.open(`https://wa.me/923433052346?text=${msg}`, '_blank');
-
-      // Reset
-      setTimeout(() => {
-        btn.innerText = originalText;
-        btn.disabled = false;
-        document.getElementById('loanForm').reset();
-      }, 2000);
-    }
-  </script>
+            const container = document.getElementById('history-data');
+            document.getElementById('modal-name').innerText = name + "'s Record";
+            
+            if(memberHistory.length > 0) {
+                container.innerHTML = memberHistory.map(row => {
+                    const values = Object.values(row);
+                    return `
+                        <div class="flex justify-between text-xs border-b pb-1">
+                            <span>${values[1] || 'N/A'}</span>
+                            <span class="font-bold">Rs. ${values[2] ? parseInt(values[2]).toLocaleString() : 0}</span>
+                        </div>
+                    `;
+                }).join('');
+            } else {
+                container.innerHTML = '<p class="text-xs text-center text-slate-400">No records found.</p>';
+            }
+            document.getElementById('modal').classList.remove('hidden');
+        }
+    </script>
 </body>
-              </html>
-              
+</html>
