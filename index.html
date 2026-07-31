@@ -3,383 +3,197 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    
-    <link rel="manifest" href="manifest.json">
-    <title>Executive Command Center | Business Portal</title>
+    <title>Instant Invoice Generator</title>
+    <!-- Tailwind CSS for Quick Modern UI -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500;800&display=swap');
-        
-        :root {
-            --bg-dark: #030712;
-            --glass-dark: rgba(17, 24, 39, 0.75);
-            --border-dark: rgba(255, 255, 255, 0.08);
-            --accent-green: #10b981;
-            --accent-cyan: #06b6d4;
-            --accent-gold: #f59e0b;
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white; padding: 0; }
+            .print-area { shadow: none; border: none; width: 100%; }
         }
-
-        body { 
-            background-color: var(--bg-dark); 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            overflow-x: hidden; 
-            margin: 0; 
-            transition: background-color 0.4s ease; 
-        }
-
-        /* Light Theme Overrides */
-        body.light-theme { 
-            background-color: #f1f5f9; 
-            color: #0f172a;
-        }
-        body.light-theme .luxury-nav { 
-            background: rgba(255, 255, 255, 0.85); 
-            border: 1px solid rgba(0, 0, 0, 0.1); 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-        }
-        body.light-theme .glass-card { 
-            background: rgba(255, 255, 255, 0.95); 
-            color: #0f172a; 
-            border: 1px solid rgba(0, 0, 0, 0.08); 
-            box-shadow: 0 20px 30px rgba(0,0,0,0.05);
-        }
-        body.light-theme .native-card {
-            background: #ffffff;
-            color: #0f172a;
-            border: 1px solid rgba(0, 0, 0, 0.06);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
-        }
-        body.light-theme .text-slate-200 { color: #1e293b; }
-        body.light-theme .text-slate-400 { color: #64748b; }
-        body.light-theme #splash { background: rgba(241, 245, 249, 0.95); }
-        body.light-theme .brand-text { color: #0f172a; }
-        body.light-theme .typing-text { color: #0f172a; border-color: #0f172a; }
-        
-        /* Blur Glass Splash Screen */
-        #splash { 
-            position: fixed; inset: 0; z-index: 9999; 
-            background: rgba(3, 7, 18, 0.85); 
-            backdrop-filter: blur(24px);
-            display: flex; flex-direction: column; justify-content: center; align-items: center; 
-            transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
-        }
-        
-        /* Fintech Double Ring Animation */
-        .circle-container { position: relative; width: 150px; height: 150px; display: flex; justify-content: center; align-items: center; }
-        .circle { position: absolute; border: 2px solid transparent; border-radius: 50%; animation: rotate 3s linear infinite; }
-        .circle-1 { width: 100%; height: 100%; border-top: 3px solid var(--accent-green); border-right: 3px solid rgba(16, 185, 129, 0.2); }
-        .circle-2 { width: 80%; height: 80%; border-bottom: 3px solid var(--accent-cyan); animation-direction: reverse; animation-duration: 2s; }
-        
-        .brand-text { font-size: 1.6rem; font-weight: 800; color: #ffffff; letter-spacing: -0.02em; }
-        
-        @keyframes rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        /* Executive Typing Tagline */
-        .typing-text { 
-            font-family: 'JetBrains Mono', monospace; 
-            color: #10b981; 
-            margin-top: 28px; 
-            font-size: 0.85rem; 
-            font-weight: 600; 
-            text-transform: uppercase; 
-            letter-spacing: 0.2em; 
-            overflow: hidden; 
-            border-right: 2px solid #10b981; 
-            white-space: nowrap; 
-            animation: typing 2.2s steps(28, end), blink 0.75s step-end infinite; 
-        }
-        @keyframes typing { from { width: 0 } to { width: 28ch } }
-        @keyframes blink { from, to { border-color: transparent } 50% { border-color: #10b981 } }
-        
-        .tab-content { 
-            display: none; 
-            min-height: 100vh; 
-            width: 100%; 
-            padding-top: 80px; 
-            padding-bottom: 120px; 
-            box-sizing: border-box;
-        }
-        .tab-content.active { display: block; }
-
-        /* Native App Styling for Cards */
-        .native-card {
-            background: rgba(17, 24, 39, 0.75);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 1.25rem;
-            padding: 1.25rem;
-            transition: transform 0.2s ease;
-        }
-        
-        /* Navigation & Glassmorphic UI */
-        .luxury-nav { 
-            background: rgba(17, 24, 39, 0.75); 
-            backdrop-filter: blur(24px); 
-            border: 1px solid rgba(255, 255, 255, 0.08); 
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-        }
-        .tab-btn { 
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-            color: #94a3b8; 
-            opacity: 0.6; 
-            cursor: pointer;
-        }
-        .tab-btn:hover { color: #ffffff; opacity: 1; }
-        .tab-btn.active-tab { 
-            color: #10b981 !important; 
-            opacity: 1 !important; 
-            transform: translateY(-4px); 
-            text-shadow: 0 0 12px rgba(16, 185, 129, 0.6); 
-        }
-        .glass-card { 
-            background: rgba(17, 24, 39, 0.95); 
-            backdrop-filter: blur(20px); 
-            border: 1px solid rgba(255, 255, 255, 0.08); 
-        }
-        
-        /* Red Dot Notification style */
-        .bell-container { position: relative; }
-        .red-dot { 
-            position: absolute; top: -1px; right: -1px; 
-            width: 9px; height: 9px; 
-            background: #ef4444; 
-            border-radius: 50%; 
-            border: 2px solid #030712; 
-        }
-
-        /* Icon Micro Animations */
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
-        .tab-btn:active i { animation: bounce 0.3s ease; }
-        .tab-btn:active { transform: scale(0.92); }
     </style>
 </head>
-<body class="text-slate-200">
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen p-4 md:p-8">
 
-    <!-- Splash Screen -->
-    <div id="splash">
-        <div class="circle-container">
-            <div class="circle circle-1"></div>
-            <div class="circle circle-2"></div>
-            <div class="brand-text">NEXUS</div>
-        </div>
-        <div class="typing-text">Command Center • V2.0</div>
-    </div>
-
-    <!-- Top Action Toolbar -->
-    <div class="fixed top-4 right-6 z-[60] flex gap-2.5">
-        <button onclick="toggleTheme()" class="w-10 h-10 rounded-xl bg-slate-900/80 border border-white/10 text-slate-400 hover:text-emerald-400 hover:bg-white/10 transition-all flex items-center justify-center backdrop-blur-md">
-            <i class="fas fa-adjust text-sm"></i>
-        </button>
-        <button id="installBtn" class="hidden w-10 h-10 rounded-xl bg-slate-900/80 border border-white/10 text-slate-400 hover:text-emerald-400 hover:bg-white/10 transition-all flex items-center justify-center backdrop-blur-md">
-            <i class="fas fa-download text-sm"></i>
-        </button>
-        <button onclick="document.getElementById('bank-popup').classList.remove('hidden')" class="w-10 h-10 rounded-xl bg-slate-900/80 border border-white/10 text-slate-400 hover:text-cyan-400 hover:bg-white/10 transition-all flex items-center justify-center backdrop-blur-md">
-            <i class="fas fa-university text-sm"></i>
-        </button>
-        <button onclick="document.getElementById('notice-popup').classList.remove('hidden')" class="w-10 h-10 rounded-xl bg-slate-900/80 border border-white/10 text-slate-400 hover:text-amber-400 hover:bg-white/10 transition-all flex items-center justify-center backdrop-blur-md bell-container">
-            <i class="fas fa-bell text-sm"></i>
-            <span class="red-dot"></span>
-        </button>
-    </div>
-
-    <!-- Corporate Banking Details Modal -->
-    <div id="bank-popup" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-md">
-        <div class="glass-card p-8 rounded-3xl w-full max-w-sm text-center shadow-2xl relative border border-white/10">
-            <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center mx-auto mb-4 border border-cyan-500/20">
-                <i class="fas fa-building-columns text-xl"></i>
-            </div>
-            <h2 class="text-white text-lg font-bold mb-1">Treasury Accounts</h2>
-            <p class="text-xs text-slate-400 mb-6">Corporate Payment Clearance</p>
+    <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- LEFT PANEL: INPUT FORM (Hidden during print) -->
+        <div class="lg:col-span-5 bg-white p-6 rounded-xl shadow-md space-y-4 no-print border border-slate-200">
+            <h2 class="text-xl font-bold text-slate-900 border-b pb-2">Invoice Details</h2>
             
-            <div class="space-y-3 mb-6">
-                <div class="bg-black/40 p-3.5 rounded-2xl text-left border border-white/5">
-                    <p class="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Primary Account</p>
-                    <p class="text-sm font-semibold text-white mt-0.5">Afzaal Ahmed</p>
-                    <p class="text-xs font-mono text-cyan-400">0342-2735966 (HBL Konnect)</p>
+            <div class="space-y-3">
+                <div>
+                    <label class="text-xs font-semibold text-slate-600 uppercase">Your Company / Name</label>
+                    <input type="text" id="sellerName" value="My Studio" class="w-full p-2 border rounded-md text-sm mt-1 focus:ring-2 focus:ring-blue-500 outline-none" oninput="updateInvoice()">
+                </div>
+                <div>
+                    <label class="text-xs font-semibold text-slate-600 uppercase">Client Name</label>
+                    <input type="text" id="clientName" value="John Doe" class="w-full p-2 border rounded-md text-sm mt-1 focus:ring-2 focus:ring-blue-500 outline-none" oninput="updateInvoice()">
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-xs font-semibold text-slate-600 uppercase">Invoice #</label>
+                        <input type="text" id="invoiceNum" value="INV-1001" class="w-full p-2 border rounded-md text-sm mt-1 focus:ring-2 focus:ring-blue-500 outline-none" oninput="updateInvoice()">
+                    </div>
+                    <div>
+                        <label class="text-xs font-semibold text-slate-600 uppercase">Tax %</label>
+                        <input type="number" id="taxRate" value="10" class="w-full p-2 border rounded-md text-sm mt-1 focus:ring-2 focus:ring-blue-500 outline-none" oninput="updateInvoice()">
+                    </div>
                 </div>
             </div>
 
-            <button onclick="document.getElementById('bank-popup').classList.add('hidden')" class="w-full py-3 bg-white/10 hover:bg-white/15 rounded-xl text-white font-semibold text-xs tracking-wider uppercase transition-all border border-white/5">Close Terminal</button>
-        </div>
-    </div>
-
-    <!-- Executive Broadcast Notice Modal -->
-    <div id="notice-popup" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-md">
-        <div class="glass-card p-8 rounded-3xl w-full max-w-sm shadow-2xl relative border border-white/10">
-            <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center mx-auto mb-4 border border-amber-500/20">
-                <i class="fas fa-bullhorn text-xl"></i>
+            <h3 class="font-bold text-slate-800 pt-2 border-b">Items</h3>
+            <div id="itemsContainer" class="space-y-2">
+                <!-- Item Rows will be dynamically added here -->
             </div>
-            <h2 class="text-white text-lg font-bold mb-1">Executive Broadcast</h2>
-            <p class="text-xs text-slate-400 mb-4">System Update & Telemetry</p>
-            <p class="text-slate-300 text-xs leading-relaxed mb-6 bg-black/30 p-4 rounded-2xl border border-white/5">
-                Alhamdulillah! All financial ledgers and analytical modules are synced live via Secure CSV pipeline. Live reporting active.
-            </p>
-            <button onclick="document.getElementById('notice-popup').classList.add('hidden')" class="w-full py-3 bg-white/10 hover:bg-white/15 rounded-xl text-white font-semibold text-xs tracking-wider uppercase transition-all border border-white/5">Acknowledge</button>
+
+            <button onclick="addItemRow()" class="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium rounded-md text-sm transition">+ Add Item</button>
+
+            <div class="pt-4 border-t">
+                <button onclick="window.print()" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-md shadow transition flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                    Download PDF / Print
+                </button>
+            </div>
         </div>
+
+        <!-- RIGHT PANEL: LIVE INVOICE PREVIEW -->
+        <div class="lg:col-span-7">
+            <div class="print-area bg-white p-8 rounded-xl shadow-md border border-slate-200 min-h-[550px] flex flex-col justify-between">
+                <div>
+                    <!-- Header -->
+                    <div class="flex justify-between items-start border-b pb-6">
+                        <div>
+                            <h1 class="text-3xl font-black text-blue-600 tracking-tight">INVOICE</h1>
+                            <p class="text-slate-500 text-sm mt-1" id="outSeller">My Studio</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-bold text-slate-700" id="outInvoiceNum">INV-1001</p>
+                            <p class="text-xs text-slate-400 mt-1">Date: <span id="outDate"></span></p>
+                        </div>
+                    </div>
+
+                    <!-- Client Info -->
+                    <div class="my-6">
+                        <p class="text-xs text-slate-400 uppercase font-semibold">Billed To:</p>
+                        <p class="text-lg font-bold text-slate-800" id="outClient">John Doe</p>
+                    </div>
+
+                    <!-- Items Table -->
+                    <table class="w-full text-left my-6">
+                        <thead>
+                            <tr class="border-b text-xs text-slate-400 uppercase">
+                                <th class="py-2">Description</th>
+                                <th class="py-2 text-center">Qty</th>
+                                <th class="py-2 text-right">Price</th>
+                                <th class="py-2 text-right">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="outTableBody" class="divide-y text-sm">
+                            <!-- Live Rows -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Totals -->
+                <div class="border-t pt-4">
+                    <div class="w-1/2 ml-auto space-y-2 text-sm">
+                        <div class="flex justify-between text-slate-500">
+                            <span>Subtotal:</span>
+                            <span id="outSubtotal">$0.00</span>
+                        </div>
+                        <div class="flex justify-between text-slate-500">
+                            <span>Tax:</span>
+                            <span id="outTax">$0.00</span>
+                        </div>
+                        <div class="flex justify-between text-base font-bold text-slate-900 border-t pt-2">
+                            <span>Total Due:</span>
+                            <span id="outTotal" class="text-blue-600">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
-    <!-- Dynamic Native Card Containers -->
-    <!-- 1. Realtime Analytics & Revenue -->
-    <div id="analytics" class="tab-content active px-4 max-w-xl mx-auto space-y-4">
-        <div class="text-center mb-6">
-            <h1 class="text-2xl font-extrabold text-white tracking-tight">Executive Dashboard</h1>
-            <p class="text-xs text-emerald-400 font-medium tracking-wide mt-1">● REALTIME SYNC ACTIVE</p>
-        </div>
-        <div id="analytics-data" class="space-y-3">
-            <p class="text-center text-xs text-slate-500 py-10">Fetching live record cards...</p>
-        </div>
-    </div>
-    
-    <!-- 2. Monthly Financial P&L -->
-    <div id="monthly" class="tab-content px-4 max-w-xl mx-auto space-y-4">
-        <div class="text-center mb-6">
-            <h1 class="text-2xl font-extrabold text-white tracking-tight">Monthly Overview</h1>
-            <p class="text-xs text-slate-400 mt-1">Cash Flow & Ledger Statements</p>
-        </div>
-        <div id="monthly-data" class="space-y-3">
-            <p class="text-center text-xs text-slate-500 py-10">Fetching live record cards...</p>
-        </div>
-    </div>
-    
-    <!-- 3. Annual Performance Audit -->
-    <div id="yearly" class="tab-content px-4 max-w-xl mx-auto space-y-4">
-        <div class="text-center mb-6">
-            <h1 class="text-2xl font-extrabold text-white tracking-tight">Yearly Audit</h1>
-            <p class="text-xs text-slate-400 mt-1">Annual Performance Summary</p>
-        </div>
-        <div id="yearly-data" class="space-y-3">
-            <p class="text-center text-xs text-slate-500 py-10">Fetching live record cards...</p>
-        </div>
-    </div>
-    
-    <!-- 4. Operations & Compliance SOPs -->
-    <div id="ops" class="tab-content px-4 max-w-xl mx-auto space-y-4">
-        <div class="text-center mb-6">
-            <h1 class="text-2xl font-extrabold text-white tracking-tight">Operations & Rules</h1>
-            <p class="text-xs text-slate-400 mt-1">Standard Operating Procedures</p>
-        </div>
-        <div id="ops-data" class="space-y-3">
-            <p class="text-center text-xs text-slate-500 py-10">Fetching live record cards...</p>
-        </div>
-    </div>
-
-    <!-- Bottom Executive Dock Navigation -->
-    <nav class="fixed bottom-6 left-6 right-6 luxury-nav rounded-2xl flex justify-between items-center z-[999] h-20 px-8 max-w-xl mx-auto">
-        <div class="flex gap-8">
-            <button id="btn-analytics" onclick="switchTab('analytics', this)" class="tab-btn active-tab" title="Live Analytics"><i class="fas fa-chart-pie text-xl"></i></button>
-            <button id="btn-monthly" onclick="switchTab('monthly', this)" class="tab-btn" title="Monthly P&L"><i class="fas fa-wallet text-xl"></i></button>
-        </div>
-        
-        <!-- Center Action Button (WhatsApp Direct Support) -->
-        <a href="https://chat.whatsapp.com/KuEfcgvGkOQHFY03h4IuHV?s=cl&p=a&ilr=1&amv=3" target="_blank" class="bg-gradient-to-tr from-emerald-500 to-cyan-500 text-slate-950 w-14 h-14 flex items-center justify-center rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-lg shadow-emerald-500/20 font-bold">
-            <i class="fab fa-whatsapp text-2xl"></i>
-        </a>
-        
-        <div class="flex gap-8">
-            <button id="btn-yearly" onclick="switchTab('yearly', this)" class="tab-btn" title="Annual Audit"><i class="fas fa-chart-line text-xl"></i></button>
-            <button id="btn-ops" onclick="switchTab('ops', this)" class="tab-btn" title="Compliance & SOPs"><i class="fas fa-shield-halved text-xl"></i></button>
-        </div>
-    </nav>
-
-    <!-- Core Engine Scripts -->
+    <!-- JAVASCRIPT LOGIC -->
     <script>
-        // ==========================================
-        // CONFIGURATION: CSV DATA STREAM PIPELINE
-        // ==========================================
-        const timeStamp = new Date().getTime();
+        let items = [
+            { desc: "Web Development", qty: 1, price: 150 },
+            { desc: "Domain & Hosting", qty: 1, price: 25 }
+        ];
 
-        const SHEET_CONFIG = {
-            analytics: `https://docs.google.com/spreadsheets/d/e/2PACX-1vSN-o5TMl9BRjprpNfnLQajL2JoByAGfStpyWR06awdkjp1l6KNHzT_7_NENIhcBLLuEw2hjb7wdGf-/pub?gid=0&single=true&output=csv&cb=${timeStamp}`,
-            monthly: `https://docs.google.com/spreadsheets/d/e/2PACX-1vSN-o5TMl9BRjprpNfnLQajL2JoByAGfStpyWR06awdkjp1l6KNHzT_7_NENIhcBLLuEw2hjb7wdGf-/pub?gid=24071758&single=true&output=csv&cb=${timeStamp}`,
-            yearly: `https://docs.google.com/spreadsheets/d/e/2PACX-1vSN-o5TMl9BRjprpNfnLQajL2JoByAGfStpyWR06awdkjp1l6KNHzT_7_NENIhcBLLuEw2hjb7wdGf-/pub?gid=1472950650&single=true&output=csv&cb=${timeStamp}`,
-            ops: `https://docs.google.com/spreadsheets/d/e/2PACX-1vSN-o5TMl9BRjprpNfnLQajL2JoByAGfStpyWR06awdkjp1l6KNHzT_7_NENIhcBLLuEw2hjb7wdGf-/pub?gid=858870323&single=true&output=csv&cb=${timeStamp}`
-        };
+        // Set Current Date
+        document.getElementById('outDate').innerText = new Date().toLocaleDateString();
 
-        // Simple CSV Parser Engine
-        function parseCSV(text) {
-            const lines = text.trim().split('\n');
-            return lines.map(line => {
-                const values = [];
-                let insideQuote = false;
-                let currentValue = '';
-                for (let char of line) {
-                    if (char === '"') insideQuote = !insideQuote;
-                    else if (char === ',' && !insideQuote) {
-                        values.push(currentValue.trim().replace(/^"|"$/g, ''));
-                        currentValue = '';
-                    } else currentValue += char;
-                }
-                values.push(currentValue.trim().replace(/^"|"$/g, ''));
-                return values;
+        function renderItemInputs() {
+            const container = document.getElementById('itemsContainer');
+            container.innerHTML = '';
+            items.forEach((item, index) => {
+                container.innerHTML += `
+                    <div class="flex gap-2 items-center">
+                        <input type="text" value="${item.desc}" oninput="updateItem(${index}, 'desc', this.value)" placeholder="Item desc" class="flex-1 p-2 border rounded-md text-sm outline-none">
+                        <input type="number" value="${item.qty}" oninput="updateItem(${index}, 'qty', this.value)" placeholder="Qty" class="w-16 p-2 border rounded-md text-sm outline-none text-center">
+                        <input type="number" value="${item.price}" oninput="updateItem(${index}, 'price', this.value)" placeholder="Price" class="w-20 p-2 border rounded-md text-sm outline-none text-right">
+                        <button onclick="removeItem(${index})" class="text-red-500 hover:text-red-700 font-bold px-1">✕</button>
+                    </div>
+                `;
             });
+            updateInvoice();
         }
 
-        // Render Native Cards Layout
-        async function fetchAndRenderData(tabKey, containerId) {
-            const container = document.getElementById(containerId);
-            try {
-                const response = await fetch(SHEET_CONFIG[tabKey]);
-                const csvData = await response.text();
-                const rows = parseCSV(csvData);
-
-                if (!rows || rows.length <= 1) {
-                    container.innerHTML = `<div class="native-card text-center text-slate-400 py-6 text-xs">No records found.</div>`;
-                    return;
-                }
-
-                const headers = rows[0];
-                const dataRows = rows.slice(1);
-                let html = '';
-
-                // Summary Big Cards Header
-                if (dataRows.length > 0 && dataRows[0].length >= 3) {
-                    html += `
-                        <div class="grid grid-cols-2 gap-3 mb-4">
-                            <div class="native-card border-l-4 border-l-emerald-500">
-                                <p class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">${headers[1] || 'Metric 1'}</p>
-                                <p class="text-lg font-extrabold text-emerald-400 mt-1">${dataRows[0][1] || '0'}</p>
-                            </div>
-                            <div class="native-card border-l-4 border-l-cyan-500">
-                                <p class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">${headers[2] || 'Metric 2'}</p>
-                                <p class="text-lg font-extrabold text-cyan-400 mt-1">${dataRows[0][2] || '0'}</p>
-                            </div>
-                        </div>
-                    `;
-                }
-
-                // Detailed Row Cards
-                dataRows.forEach((row) => {
-                    if (!row[0] && !row[1]) return; // Skip empty rows
-                    
-                    html += `
-                        <div class="native-card flex items-center justify-between shadow-sm hover:border-emerald-500/30 transition-all">
-                            <div class="space-y-1">
-                                <p class="font-bold text-white text-sm">${row[0] || '-'}</p>
-                                ${row[1] ? `<p class="text-xs text-slate-400">${headers[1] || ''}: <span class="text-slate-200 font-medium">${row[1]}</span></p>` : ''}
-                                ${row[3] ? `<p class="text-[11px] text-slate-500">${row[3]}</p>` : ''}
-                            </div>
-                            <div class="text-right">
-                                ${row[2] ? `<span class="inline-block bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs px-2.5 py-1 rounded-lg font-bold">${row[2]}</span>` : ''}
-                                ${row[4] ? `<p class="text-[10px] text-cyan-400 font-mono mt-1">${row[4]}</p>` : ''}
-                            </div>
-                        </div>
-                    `;
-                });
-
-                container.innerHTML = html;
-            } catch (err) {
-                container.innerHTML = `<div class="native-card text-center text-rose-400 py-6 text-xs">Error loading live data stream.</div>`;
-            }
+        function addItemRow() {
+            items.push({ desc: "New Service", qty: 1, price: 0 });
+            renderItemInputs();
         }
 
-        // Theme Toggle Handler
-        function toggleTheme() {
-            document.body.classList.toggle('light-theme');
-            localStorage.setItem('theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
+        function removeItem(index) {
+            items.splice(index, 1);
+            renderItemInputs();
         }
-        
+
+        function updateItem(index, key, value) {
+            items[index][key] = key === 'desc' ? value : parseFloat(value) || 0;
+            updateInvoice();
+        }
+
+        function updateInvoice() {
+            // Update Text Details
+            document.getElementById('outSeller').innerText = document.getElementById('sellerName').value || 'Company Name';
+            document.getElementById('outClient').innerText = document.getElementById('clientName').value || 'Client Name';
+            document.getElementById('outInvoiceNum').innerText = document.getElementById('invoiceNum').value || 'INV-000';
+
+            // Calculate Totals
+            let subtotal = 0;
+            const tbody = document.getElementById('outTableBody');
+            tbody.innerHTML = '';
+
+            items.forEach(item => {
+                const itemTotal = item.qty * item.price;
+                subtotal += itemTotal;
+                tbody.innerHTML += `
+                    <tr>
+                        <td class="py-3 font-medium text-slate-700">${item.desc}</td>
+                        <td class="py-3 text-center text-slate-500">${item.qty}</td>
+                        <td class="py-3 text-right text-slate-500">$${item.price.toFixed(2)}</td>
+                        <td class="py-3 text-right font-semibold text-slate-700">$${itemTotal.toFixed(2)}</td>
+                    </tr>
+                `;
+            });
+
+            const taxRate = parseFloat(document.getElementById('taxRate').value) || 0;
+            const taxAmount = (subtotal * taxRate) / 100;
+            const grandTotal = subtotal + taxAmount;
+
+            document.getElementById('outSubtotal').innerText = '$' + subtotal.toFixed(2);
+            document.getElementById('outTax').innerText = '$' + taxAmount.toFixed(2);
+            document.getElementById('outTotal').innerText = '$' + grandTotal.toFixed(2);
+        }
+
+        // Initialize
+        renderItemInputs();
+    </script>
+</body>
+</html>
