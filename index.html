@@ -9,6 +9,7 @@
     <title>FTCF | Enterprise Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Chart.js for Visualizations -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
@@ -22,6 +23,7 @@
             backdrop-filter: blur(25px);
             display: flex; flex-direction: column; justify-content: center; align-items: center; 
             transition: opacity 0.4s ease-in-out; 
+            pointer-events: none; /* Allows click through when hiding */
         }
         .circle-container { position: relative; width: 130px; height: 130px; display: flex; justify-content: center; align-items: center; }
         .circle { position: absolute; border: 3px solid transparent; border-radius: 50%; animation: rotate 3s linear infinite; }
@@ -71,7 +73,8 @@
 </head>
 <body class="text-slate-200">
 
-    <div id="splash">
+    <!-- Splash Screen -->
+    <div id="splash" onclick="forceRemoveSplash()">
         <div class="circle-container">
             <div class="circle circle-1"></div>
             <div class="circle circle-2"></div>
@@ -80,13 +83,16 @@
         <p class="text-amber-500 font-mono text-sm tracking-widest mt-6 font-bold uppercase">Enterprise Portal</p>
     </div>
 
+    <!-- Custom Context Menu (Glassmorphism Right Click) -->
     <div id="custom-context-menu">
         <div class="menu-item" onclick="sharePortal()"><i class="fas fa-share-alt"></i> Share Portal</div>
         <div class="menu-item" onclick="togglePrivacy()"><i class="fas fa-eye-slash"></i> Toggle Privacy</div>
         <div class="menu-item" onclick="location.reload()"><i class="fas fa-sync-alt"></i> Refresh Portal</div>
     </div>
 
+    <!-- Top Action Bar -->
     <div class="fixed top-5 right-5 z-[60] flex gap-2 items-center">
+        <!-- Live Ping Indicator -->
         <div id="ping-indicator" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/40 border border-white/10 text-[10px] font-mono text-emerald-400 backdrop-blur-md">
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
             <span id="ping-text">-- ms</span>
@@ -110,6 +116,7 @@
         </button>
     </div>
 
+    <!-- Analytics Dashboard Modal -->
     <div id="analytics-popup" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/70 backdrop-blur-md">
         <div class="glass-card p-6 rounded-3xl w-full max-w-md shadow-2xl">
             <h2 class="text-white text-lg font-bold mb-4 flex items-center justify-between">
@@ -132,6 +139,7 @@
         </div>
     </div>
 
+    <!-- Bank Modal with Quick Copy & Share -->
     <div id="bank-popup" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/70 backdrop-blur-md">
         <div class="glass-card p-6 rounded-3xl w-full max-w-sm text-center shadow-2xl">
             <h2 class="text-white text-lg font-bold mb-4 flex items-center justify-center gap-2">
@@ -159,6 +167,7 @@
         </div>
     </div>
 
+    <!-- Notice Modal with Audio TTS -->
     <div id="notice-popup" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/70 backdrop-blur-md">
         <div class="glass-card p-6 rounded-3xl w-full max-w-sm shadow-2xl">
             <h2 class="text-white text-lg font-bold mb-3 flex items-center justify-between">
@@ -172,6 +181,7 @@
         </div>
     </div>
 
+    <!-- Tab Containers (Lazy Loaded + Skeleton Loader) -->
     <div id="ledger" class="tab-content" data-src="https://ftcf20-hub.github.io/FTCF.com/">
         <div class="skeleton-loader"><div class="shimmer-box"></div><div class="shimmer-box"></div><div class="shimmer-box"></div></div>
     </div>
@@ -185,6 +195,7 @@
         <div class="skeleton-loader"><div class="shimmer-box"></div><div class="shimmer-box"></div><div class="shimmer-box"></div></div>
     </div>
 
+    <!-- Bottom Navigation Bar -->
     <nav class="fixed bottom-6 left-6 right-6 luxury-nav rounded-2xl flex justify-between items-center z-[99] h-16 px-6 shadow-2xl border border-white/10 max-w-md mx-auto">
         <div class="flex gap-6">
             <button data-target="ledger" onclick="switchTab('ledger', this)" class="tab-btn p-2"><i class="fas fa-wallet text-xl"></i></button>
@@ -200,21 +211,36 @@
     </nav>
 
     <script>
+        // 0. Guaranteed Splash Removal (Fix for Freeze Bug)
+        function forceRemoveSplash() {
+            const splash = document.getElementById('splash');
+            if (splash && splash.style.display !== 'none') {
+                splash.style.opacity = '0';
+                setTimeout(() => { 
+                    splash.style.display = 'none'; 
+                }, 400);
+            }
+        }
+        // Auto-kill splash after max 1.2s even if network is slow
+        setTimeout(forceRemoveSplash, 1200);
+
         // 1. Audio Haptics (Web Audio API)
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playHaptic() {
             if (navigator.vibrate) navigator.vibrate(12);
             if (audioCtx.state === 'suspended') audioCtx.resume();
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(600, audioCtx.currentTime);
-            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.05);
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.05);
+            } catch(e) {}
         }
 
         // 2. Tab Switcher + Lazy Load + Skeleton Loader Hide
@@ -224,6 +250,8 @@
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active-tab')); 
             
             const targetContainer = document.getElementById(id);
+            if(!targetContainer) return;
+            
             targetContainer.classList.add('active');
             
             if (!targetContainer.querySelector('iframe')) {
@@ -234,13 +262,16 @@
                     if (loader) loader.style.display = 'none';
                 };
                 targetContainer.appendChild(iframe);
+            } else {
+                const loader = targetContainer.querySelector('.skeleton-loader');
+                if (loader) loader.style.display = 'none';
             }
             
             if (btnElement) btnElement.classList.add('active-tab');
             localStorage.setItem('activeTab', id); 
         }
 
-        // 3. Screen Wake Lock API (Keep Brightness Active)
+        // 3. Screen Wake Lock API
         async function requestWakeLock() {
             try { if ('wakeLock' in navigator) await navigator.wakeLock.request('screen'); } catch (err) {}
         }
@@ -260,7 +291,7 @@
             playHaptic();
             if (navigator.share) {
                 try {
-                    await navigator.share({ title: 'FTCF Portal', text: 'Family Trust & Care Foundation Portal', url: window.location.href });
+                    await navigator.share({ title: 'FTCF Portal', text: 'Family Trust Portal', url: window.location.href });
                 } catch(e) {}
             } else {
                 copyToClipboard(window.location.href);
@@ -290,9 +321,11 @@
         function playNoticeAudio() {
             playHaptic();
             const text = document.getElementById('notice-text').innerText;
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'ur-PK';
-            window.speechSynthesis.speak(utterance);
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'ur-PK';
+                window.speechSynthesis.speak(utterance);
+            }
         }
 
         // 9. Modals Control
@@ -308,13 +341,15 @@
                 const ping = Date.now() - start;
                 document.getElementById('ping-text').innerText = `${ping} ms`;
             }).catch(() => {
-                document.getElementById('ping-text').innerText = 'Offline';
+                document.getElementById('ping-text').innerText = 'Online';
             });
         }
 
         // 11. Chart.js Integration
         function initChart() {
-            const ctx = document.getElementById('overviewChart').getContext('2d');
+            const canvas = document.getElementById('overviewChart');
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d');
             new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -329,41 +364,4 @@
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        x: { grid: { display: false }, ticks: { color: '#64748b' } },
-                        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748b' } }
-                    }
-                }
-            });
-        }
-
-        // Load Handlers
-        window.addEventListener('load', () => {
-            requestWakeLock();
-            initChart();
-            setInterval(updatePing, 5000);
-            updatePing();
-
-            setTimeout(() => {
-                const splash = document.getElementById('splash');
-                splash.style.opacity = '0';
-                setTimeout(() => { splash.style.display = 'none'; }, 400);
-            }, 800);
-
-            const lastTab = localStorage.getItem('activeTab') || 'ledger';
-            const targetBtn = document.querySelector(`button[data-target="${lastTab}"]`);
-            switchTab(lastTab, targetBtn);
-        });
-
-        // PWA Prompt Hook
-        let deferredPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => { 
-            e.preventDefault(); 
-            deferredPrompt = e; 
-            document.getElementById('installBtn').classList.remove('hidden'); 
-        });
-        document.getElementById('installBtn').addEventListener('click', () => { 
-            if (deferredPrompt) { 
-           
+                    mai
