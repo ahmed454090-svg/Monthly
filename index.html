@@ -16,17 +16,16 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono:wght@400;800&display=swap');
         body { background-color: #050505; font-family: 'Inter', sans-serif; overflow: hidden; margin: 0; user-select: none; }
         
-        /* Splash Screen */
+        /* Splash Screen - Ultra Hard Fail Safe Setup */
         #splash { 
-            position: fixed; inset: 0; z-index: 9999; 
-            background: rgba(0, 0, 0, 0.85); 
+            position: fixed; inset: 0; z-index: 99999; 
+            background: rgba(0, 0, 0, 0.95); 
             backdrop-filter: blur(25px);
             display: flex; flex-direction: column; justify-content: center; align-items: center; 
-            transition: opacity 0.4s ease-in-out; 
-            pointer-events: none; /* Allows click through when hiding */
+            cursor: pointer;
         }
         .circle-container { position: relative; width: 130px; height: 130px; display: flex; justify-content: center; align-items: center; }
-        .circle { position: absolute; border: 3px solid transparent; border-radius: 50%; animation: rotate 3s linear infinite; }
+        .circle { position: absolute; border: 3px solid transparent; border-radius: 50%; animation: rotate 1.5s linear infinite; }
         .circle-1 { width: 100%; height: 100%; border-top: 3px solid #ffffff; }
         .circle-2 { width: 85%; height: 85%; border-bottom: 3px solid #f59e0b; animation-direction: reverse; }
         .ftcf-text { font-size: 1.75rem; font-weight: 800; color: #ffffff; letter-spacing: 1px; }
@@ -73,14 +72,15 @@
 </head>
 <body class="text-slate-200">
 
-    <!-- Splash Screen -->
-    <div id="splash" onclick="forceRemoveSplash()">
+    <!-- Splash Screen (Instant Tap Purge Added) -->
+    <div id="splash" onclick="killSplashImmediate()">
         <div class="circle-container">
             <div class="circle circle-1"></div>
             <div class="circle circle-2"></div>
             <div class="ftcf-text">FTCF</div>
         </div>
         <p class="text-amber-500 font-mono text-sm tracking-widest mt-6 font-bold uppercase">Enterprise Portal</p>
+        <p class="text-slate-500 text-xs mt-2 font-sans">(Tap anywhere to skip)</p>
     </div>
 
     <!-- Custom Context Menu (Glassmorphism Right Click) -->
@@ -211,18 +211,18 @@
     </nav>
 
     <script>
-        // 0. Guaranteed Splash Removal (Fix for Freeze Bug)
-        function forceRemoveSplash() {
-            const splash = document.getElementById('splash');
-            if (splash && splash.style.display !== 'none') {
-                splash.style.opacity = '0';
-                setTimeout(() => { 
-                    splash.style.display = 'none'; 
-                }, 400);
+        // GUARANTEED PURGE FUNCTION (Hard DOM Deletion)
+        function killSplashImmediate() {
+            const el = document.getElementById('splash');
+            if (el) {
+                el.style.display = 'none';
+                el.remove(); // Removes element directly from DOM memory
             }
         }
-        // Auto-kill splash after max 1.2s even if network is slow
-        setTimeout(forceRemoveSplash, 1200);
+
+        // AUTO PURGE AT 300ms (Fires even before DOM load completes)
+        setTimeout(killSplashImmediate, 300);
+        document.addEventListener("DOMContentLoaded", killSplashImmediate);
 
         // 1. Audio Haptics (Web Audio API)
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -363,5 +363,4 @@
                     }]
                 },
                 options: {
-                    responsive: true,
-                    mai
+                 
