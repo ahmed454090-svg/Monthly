@@ -1,366 +1,342 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    
-    <link rel="manifest" href="manifest.json">
-    <title>FTCF | Enterprise Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FTCF | Monthly Collection - Ramzan Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Chart.js for Visualizations -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono:wght@400;800&display=swap');
-        body { background-color: #050505; font-family: 'Inter', sans-serif; overflow: hidden; margin: 0; user-select: none; }
-        
-        /* Splash Screen - Ultra Hard Fail Safe Setup */
-        #splash { 
-            position: fixed; inset: 0; z-index: 99999; 
-            background: rgba(0, 0, 0, 0.95); 
-            backdrop-filter: blur(25px);
-            display: flex; flex-direction: column; justify-content: center; align-items: center; 
-            cursor: pointer;
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #011c14; 
+            color: #f8fafc;
+            min-height: 100vh;
+            overflow-x: hidden;
+            margin: 0;
+            -webkit-tap-highlight-color: transparent;
         }
-        .circle-container { position: relative; width: 130px; height: 130px; display: flex; justify-content: center; align-items: center; }
-        .circle { position: absolute; border: 3px solid transparent; border-radius: 50%; animation: rotate 1.5s linear infinite; }
-        .circle-1 { width: 100%; height: 100%; border-top: 3px solid #ffffff; }
-        .circle-2 { width: 85%; height: 85%; border-bottom: 3px solid #f59e0b; animation-direction: reverse; }
-        .ftcf-text { font-size: 1.75rem; font-weight: 800; color: #ffffff; letter-spacing: 1px; }
-        @keyframes rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        /* Layout & Tabs */
-        .tab-content { display: none; height: 100vh; width: 100vw; position: relative; }
-        .tab-content.active { display: block; }
-        iframe { width: 100%; height: 100%; border: none; }
-        
-        /* Skeleton Loader Shimmer */
-        .skeleton-loader {
-            position: absolute; inset: 0; background: #0a0a0a;
-            display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 15px; z-index: 10;
-        }
-        .shimmer-box {
-            width: 80%; height: 20px; background: linear-gradient(90deg, #111 25%, #222 50%, #111 75%);
-            background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 8px;
-        }
-        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
-        /* Custom Context Menu */
-        #custom-context-menu {
-            position: fixed; z-index: 10000; display: none;
-            background: rgba(15, 15, 15, 0.95); backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; width: 200px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); padding: 8px 0;
+        /* Next-Level Ramzan Spiritual Night Sky Background */
+        .bg-ramzan-sky {
+            background: radial-gradient(circle at 50% 25%, #064e3b 0%, #022c22 50%, #011c14 100%);
+            position: relative;
+            overflow: hidden;
         }
-        .menu-item { padding: 10px 16px; font-size: 0.85rem; color: #e2e8f0; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: 0.2s; }
-        .menu-item:hover { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
 
-        /* UI Enhancements */
-        .luxury-nav { background: rgba(10, 10, 10, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .tab-btn { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); color: #94a3b8; opacity: 0.6; }
-        .tab-btn.active-tab { color: #f59e0b !important; opacity: 1 !important; transform: translateY(-3px); }
-        .glass-card { background: rgba(15, 15, 15, 0.95); backdrop-filter: blur(25px); border: 1px solid rgba(255,255,255,0.12); }
-        
-        .bell-container { position: relative; }
-        .red-dot { position: absolute; top: 0px; right: 0px; width: 9px; height: 9px; background: #ef4444; border-radius: 50%; border: 2px solid #050505; }
-        
-        /* Privacy Masking Effect */
-        .privacy-masked .maskable { filter: blur(6px); transition: filter 0.3s; }
+        /* Subtle Sparkling Stars Effect */
+        .bg-ramzan-sky::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, #f1f5f9, rgba(0,0,0,0)),
+                radial-gradient(1.5px 1.5px at 45px 75px, #2dd4bf, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 95px 40px, #f1f5f9, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 135px 85px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 170px 125px, #2dd4bf, rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            opacity: 0.4;
+            animation: twinkle 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.25; transform: scale(0.98); }
+            100% { opacity: 0.65; transform: scale(1.02); }
+        }
+
+        /* Ambient Lighting Mesh Glows */
+        .ambient-glow-1 {
+            position: fixed;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(45, 212, 191, 0.12) 0%, rgba(255,255,255,0) 70%);
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(40px);
+        }
+
+        .bank-gradient { 
+            background: linear-gradient(135deg, rgba(6, 95, 70, 0.95) 0%, rgba(1, 28, 20, 0.98) 100%); 
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
+            border: 1.5px solid rgba(45, 212, 191, 0.35);
+        }
+
+        .bank-gradient::after {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; bottom: 0; left: 0;
+            background: radial-gradient(circle at top right, rgba(45, 212, 191, 0.15), transparent 60%);
+            pointer-events: none;
+        }
+
+        /* Executive Glassmorphism */
+        .glass-card { 
+            background: rgba(2, 44, 34, 0.85); 
+            backdrop-filter: blur(16px); 
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(45, 212, 191, 0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.6), 0 0 18px rgba(45, 212, 191, 0.25);
+            border-color: rgba(45, 212, 191, 0.6);
+            background: rgba(6, 78, 59, 0.95);
+        }
+
+        /* Progress Bar Animation */
+        .progress-fill {
+            transition: width 1s ease-in-out;
+        }
+
+        /* Shimmer Skeleton Loader */
+        .skeleton {
+            background: linear-gradient(90deg, rgba(2, 44, 34, 0.8) 25%, rgba(6, 78, 59, 0.9) 50%, rgba(2, 44, 34, 0.8) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Live Pulse Dot */
+        .pulse-dot {
+            width: 7px;
+            height: 7px;
+            background-color: #2dd4bf;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #2dd4bf;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(45, 212, 191, 0.8); }
+            70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(45, 212, 191, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(45, 212, 191, 0); }
+        }
     </style>
 </head>
-<body class="text-slate-200">
+<body class="pb-8 relative antialiased selection:bg-teal-500 selection:text-black bg-ramzan-sky">
 
-    <!-- Splash Screen (Instant Tap Purge Added) -->
-    <div id="splash" onclick="killSplashImmediate()">
-        <div class="circle-container">
-            <div class="circle circle-1"></div>
-            <div class="circle circle-2"></div>
-            <div class="ftcf-text">FTCF</div>
-        </div>
-        <p class="text-amber-500 font-mono text-sm tracking-widest mt-6 font-bold uppercase">Enterprise Portal</p>
-        <p class="text-slate-500 text-xs mt-2 font-sans">(Tap anywhere to skip)</p>
-    </div>
+    <div class="ambient-glow-1"></div>
 
-    <!-- Custom Context Menu (Glassmorphism Right Click) -->
-    <div id="custom-context-menu">
-        <div class="menu-item" onclick="sharePortal()"><i class="fas fa-share-alt"></i> Share Portal</div>
-        <div class="menu-item" onclick="togglePrivacy()"><i class="fas fa-eye-slash"></i> Toggle Privacy</div>
-        <div class="menu-item" onclick="location.reload()"><i class="fas fa-sync-alt"></i> Refresh Portal</div>
-    </div>
+    <main class="w-full max-w-md mx-auto px-4 pt-5 space-y-5 relative z-20">
 
-    <!-- Top Action Bar -->
-    <div class="fixed top-5 right-5 z-[60] flex gap-2 items-center">
-        <!-- Live Ping Indicator -->
-        <div id="ping-indicator" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/40 border border-white/10 text-[10px] font-mono text-emerald-400 backdrop-blur-md">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span id="ping-text">-- ms</span>
-        </div>
-
-        <button id="privacyBtn" onclick="togglePrivacy()" class="w-10 h-10 rounded-full bg-black/40 border border-white/10 text-slate-300 hover:text-amber-500 backdrop-blur-md transition-all">
-            <i id="privacyIcon" class="fas fa-eye"></i>
-        </button>
-        <button id="installBtn" class="hidden w-10 h-10 rounded-full bg-black/40 border border-white/10 text-slate-300 hover:text-amber-500 backdrop-blur-md transition-all">
-            <i class="fas fa-download"></i>
-        </button>
-        <button onclick="toggleModal('analytics-popup', true)" class="w-10 h-10 rounded-full bg-black/40 border border-white/10 text-slate-300 hover:text-amber-500 backdrop-blur-md transition-all">
-            <i class="fas fa-chart-pie"></i>
-        </button>
-        <button onclick="toggleModal('bank-popup', true)" class="w-10 h-10 rounded-full bg-black/40 border border-white/10 text-slate-300 hover:text-amber-500 backdrop-blur-md transition-all">
-            <i class="fas fa-university"></i>
-        </button>
-        <button onclick="toggleModal('notice-popup', true)" class="w-10 h-10 rounded-full bg-black/40 border border-white/10 text-slate-300 hover:text-amber-500 backdrop-blur-md bell-container transition-all">
-            <i class="fas fa-bell"></i>
-            <span class="red-dot"></span>
-        </button>
-    </div>
-
-    <!-- Analytics Dashboard Modal -->
-    <div id="analytics-popup" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/70 backdrop-blur-md">
-        <div class="glass-card p-6 rounded-3xl w-full max-w-md shadow-2xl">
-            <h2 class="text-white text-lg font-bold mb-4 flex items-center justify-between">
-                <span><i class="fas fa-chart-line text-amber-500 mr-2"></i> Financial Insights</span>
-                <button onclick="toggleModal('analytics-popup', false)" class="text-slate-400 hover:text-white"><i class="fas fa-times"></i></button>
-            </h2>
-            <div class="w-full h-48 mb-4">
-                <canvas id="overviewChart"></canvas>
-            </div>
-            <div class="grid grid-cols-2 gap-3 text-center font-mono text-xs">
-                <div class="bg-black/40 p-3 rounded-xl border border-white/5">
-                    <span class="text-slate-400 block">Total Active Funds</span>
-                    <span class="text-amber-400 font-bold text-sm maskable">PKR 125,000</span>
+        <!-- Top App Bar -->
+        <header class="flex justify-between items-center px-1">
+            <div class="flex items-center gap-2">
+                <div class="w-9 h-9 rounded-xl bg-emerald-950 text-teal-300 flex items-center justify-center font-black text-xs shadow-md border border-teal-500/40">
+                    FT
                 </div>
-                <div class="bg-black/40 p-3 rounded-xl border border-white/5">
-                    <span class="text-slate-400 block">Active Members</span>
-                    <span class="text-white font-bold text-sm">20 Members</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Bank Modal with Quick Copy & Share -->
-    <div id="bank-popup" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/70 backdrop-blur-md">
-        <div class="glass-card p-6 rounded-3xl w-full max-w-sm text-center shadow-2xl">
-            <h2 class="text-white text-lg font-bold mb-4 flex items-center justify-center gap-2">
-                <i class="fas fa-university text-amber-500"></i> HBL Konnect Details
-            </h2>
-            <div class="bg-black/40 p-4 rounded-2xl text-left border border-white/5 space-y-3 mb-6">
                 <div>
-                    <span class="text-xs text-slate-400 block">Account Title</span>
-                    <span class="text-sm text-white font-semibold">Afzaal Ahmed</span>
+                    <h1 class="text-xs font-black uppercase tracking-wider text-slate-100">Family Trust</h1>
+                    <p class="text-[9px] font-bold text-slate-400">Secure Ledger</p>
                 </div>
-                <div class="pt-2 border-t border-white/5 flex justify-between items-center">
+            </div>
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-950/90 border border-teal-500/40 shadow-sm text-[10px] font-bold text-teal-300">
+                <span class="pulse-dot"></span> <span>Live Sync</span>
+            </div>
+        </header>
+
+        <!-- Executive Hero Banner -->
+        <div class="bank-gradient text-white p-6 rounded-3xl relative">
+            <div class="flex justify-between items-start mb-4">
+                <span class="text-[9px] font-black uppercase tracking-[0.25em] text-teal-300 bg-teal-500/10 px-3 py-1 rounded-full border border-teal-500/30 backdrop-blur-md">
+                    Rs. 500 / Member
+                </span>
+                <i class="fas fa-shield-halved text-teal-300/70 text-sm"></i>
+            </div>
+            
+            <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-teal-300/80">Monthly Collection</p>
+            
+            <div class="mt-4 bg-emerald-950/40 p-4 rounded-2xl border border-teal-500/20 backdrop-blur-lg space-y-3">
+                <div class="flex justify-between items-end">
                     <div>
-                        <span class="text-xs text-slate-400 block">Account / Mobile Number</span>
-                        <span id="bank-acc" class="text-sm text-amber-400 font-mono font-bold maskable">0342-2735966</span>
+                        <p class="text-[9px] uppercase font-bold tracking-widest text-slate-400">Current Period</p>
+                        <p id="month-display" class="font-extrabold text-sm text-slate-100 mt-0.5">
+                            <span class="inline-block h-4 w-20 skeleton rounded"></span>
+                        </p>
                     </div>
-                    <button onclick="copyToClipboard('03422735966')" class="text-xs bg-amber-500/20 text-amber-400 px-2.5 py-1.5 rounded-lg hover:bg-amber-500/30">
-                        <i class="fas fa-copy"></i> Copy
-                    </button>
+                    <div class="text-right">
+                        <p class="text-[9px] uppercase font-bold tracking-widest text-slate-400">Total Fund</p>
+                        <p id="total-collection" class="font-black text-2xl text-teal-300 tracking-tight mt-0.5">Rs. 0</p>
+                    </div>
+                </div>
+
+                <!-- Target Progress Bar -->
+                <div class="pt-2 border-t border-teal-500/20">
+                    <div class="flex justify-between items-center text-[10px] font-bold mb-1.5">
+                        <span class="text-slate-400 uppercase tracking-wider">Target Goal</span>
+                        <span id="target-percent" class="text-teal-300">0%</span>
+                    </div>
+                    <div class="w-full h-2 bg-emerald-950 rounded-full overflow-hidden p-0.5 border border-teal-500/30">
+                        <div id="progress-bar-fill" class="progress-fill h-full bg-gradient-to-r from-teal-500 to-emerald-400 rounded-full w-0 shadow-[0_0_10px_#2dd4bf]"></div>
+                    </div>
                 </div>
             </div>
-            <div class="flex gap-2">
-                <button onclick="sharePortal()" class="w-1/2 py-3 bg-amber-500/20 text-amber-400 rounded-xl font-semibold transition-all"><i class="fas fa-share-alt mr-1"></i> Share</button>
-                <button onclick="toggleModal('bank-popup', false)" class="w-1/2 py-3 bg-white/10 hover:bg-white/20 rounded-xl text-white font-semibold transition-all">Close</button>
+        </div>
+
+        <!-- KPI Metrics Grid -->
+        <div class="grid grid-cols-2 gap-3">
+            <div class="glass-card p-3.5 rounded-2xl flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-teal-500/15 text-teal-300 flex items-center justify-center font-bold text-xs border border-teal-500/30 shrink-0">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div>
+                    <p class="text-[9px] font-bold uppercase tracking-wider text-slate-400">Paid Members</p>
+                    <p id="paid-count" class="text-sm font-extrabold text-slate-100">0</p>
+                </div>
+            </div>
+
+            <div class="glass-card p-3.5 rounded-2xl flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-rose-500/15 text-rose-400 flex items-center justify-center font-bold text-xs border border-rose-500/30 shrink-0">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div>
+                    <p class="text-[9px] font-bold uppercase tracking-wider text-slate-400">Pending</p>
+                    <p id="unpaid-count" class="text-sm font-extrabold text-slate-100">0</p>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Notice Modal with Audio TTS -->
-    <div id="notice-popup" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/70 backdrop-blur-md">
-        <div class="glass-card p-6 rounded-3xl w-full max-w-sm shadow-2xl">
-            <h2 class="text-white text-lg font-bold mb-3 flex items-center justify-between">
-                <span class="flex items-center gap-2"><i class="fas fa-bullhorn text-amber-500"></i> System Notice</span>
-                <button onclick="playNoticeAudio()" class="text-amber-500 hover:text-amber-400 text-sm bg-amber-500/10 p-2 rounded-full"><i class="fas fa-volume-up"></i></button>
-            </h2>
-            <p id="notice-text" class="text-slate-300 text-sm leading-relaxed mb-6">
-                Alhamdulillah! FTCF portal updates complete ho chuki hain. Safe aur fast browsing ke liye caching aur enterprise optimizations active hain.
-            </p>
-            <button onclick="toggleModal('notice-popup', false)" class="w-full py-3 bg-amber-500/20 text-amber-400 hover:bg-amber-500/30 rounded-xl font-semibold transition-all">Acknowledge</button>
-        </div>
-    </div>
+        <!-- Search & Filters -->
+        <section class="space-y-3">
+            <div class="flex justify-between items-center px-1">
+                <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-teal-300/80">Members Directory</h3>
+                <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Live Status</span>
+            </div>
 
-    <!-- Tab Containers (Lazy Loaded + Skeleton Loader) -->
-    <div id="ledger" class="tab-content" data-src="https://ftcf20-hub.github.io/FTCF.com/">
-        <div class="skeleton-loader"><div class="shimmer-box"></div><div class="shimmer-box"></div><div class="shimmer-box"></div></div>
-    </div>
-    <div id="monthly" class="tab-content" data-src="https://ftcf20-hub.github.io/Monthly-Status/">
-        <div class="skeleton-loader"><div class="shimmer-box"></div><div class="shimmer-box"></div><div class="shimmer-box"></div></div>
-    </div>
-    <div id="yearly" class="tab-content" data-src="https://ftcf20-hub.github.io/Yearly-Record/">
-        <div class="skeleton-loader"><div class="shimmer-box"></div><div class="shimmer-box"></div><div class="shimmer-box"></div></div>
-    </div>
-    <div id="rules" class="tab-content" data-src="https://ftcf20-hub.github.io/Loneportal/">
-        <div class="skeleton-loader"><div class="shimmer-box"></div><div class="shimmer-box"></div><div class="shimmer-box"></div></div>
-    </div>
+            <div class="relative">
+                <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-teal-300/60 text-xs"></i>
+                <input type="text" id="searchInput" placeholder="Search member name..." 
+                       class="w-full pl-9 pr-4 py-2.5 rounded-2xl bg-emerald-950/80 border border-teal-500/30 text-xs text-slate-100 placeholder-slate-400 focus:outline-none focus:border-teal-400 shadow-sm transition-all">
+            </div>
 
-    <!-- Bottom Navigation Bar -->
-    <nav class="fixed bottom-6 left-6 right-6 luxury-nav rounded-2xl flex justify-between items-center z-[99] h-16 px-6 shadow-2xl border border-white/10 max-w-md mx-auto">
-        <div class="flex gap-6">
-            <button data-target="ledger" onclick="switchTab('ledger', this)" class="tab-btn p-2"><i class="fas fa-wallet text-xl"></i></button>
-            <button data-target="monthly" onclick="switchTab('monthly', this)" class="tab-btn p-2"><i class="fas fa-calendar-check text-xl"></i></button>
+            <!-- Members List -->
+            <div id="member-list" class="space-y-2.5 max-h-[380px] overflow-y-auto pr-1">
+                <div class="p-4 rounded-2xl bg-emerald-950/80 border border-teal-500/20 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full skeleton shrink-0"></div>
+                        <div class="space-y-1">
+                            <div class="h-3.5 w-28 skeleton rounded"></div>
+                            <div class="h-2.5 w-16 skeleton rounded"></div>
+                        </div>
+                    </div>
+                    <div class="space-y-1 text-right">
+                        <div class="h-3.5 w-16 skeleton rounded"></div>
+                        <div class="h-3 w-12 skeleton rounded ml-auto"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <div class="text-center opacity-60 text-[9px] font-black uppercase tracking-[0.25em] pt-2 text-slate-400 font-mono">
+            @FTCF2026 Founder Mughal Brothers
         </div>
-        <a href="https://chat.whatsapp.com/KuEfcgvGkOQHFY03h4IuHV?s=cl&p=a&ilr=1&amv=3" target="_blank" onclick="playHaptic()" class="bg-amber-500 text-black w-12 h-12 flex items-center justify-center rounded-xl font-bold shadow-lg hover:bg-amber-400 transition-all -translate-y-2">
-            <i class="fab fa-whatsapp text-2xl"></i>
-        </a>
-        <div class="flex gap-6">
-            <button data-target="yearly" onclick="switchTab('yearly', this)" class="tab-btn p-2"><i class="fas fa-chart-line text-xl"></i></button>
-            <button data-target="rules" onclick="switchTab('rules', this)" class="tab-btn p-2"><i class="fas fa-gavel text-xl"></i></button>
-        </div>
-    </nav>
+    </main>
 
     <script>
-        // GUARANTEED PURGE FUNCTION (Hard DOM Deletion)
-        function killSplashImmediate() {
-            const el = document.getElementById('splash');
-            if (el) {
-                el.style.display = 'none';
-                el.remove(); // Removes element directly from DOM memory
-            }
-        }
+        const SHEET_ID = "1hUEigyVt9FcLdeT-2G44mcUMo-r3gSb7AN0XcXilMVw";
+        const BASE_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
 
-        // AUTO PURGE AT 300ms (Fires even before DOM load completes)
-        setTimeout(killSplashImmediate, 300);
-        document.addEventListener("DOMContentLoaded", killSplashImmediate);
-
-        // 1. Audio Haptics (Web Audio API)
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        function playHaptic() {
-            if (navigator.vibrate) navigator.vibrate(12);
-            if (audioCtx.state === 'suspended') audioCtx.resume();
+        async function loadDashboardData() {
             try {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(600, audioCtx.currentTime);
-                gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.05);
-            } catch(e) {}
-        }
+                // Fetch Month
+                const monthRes = await fetch(`${BASE_URL}&range=H1`);
+                const monthTxt = await monthRes.text();
+                const monthJson = JSON.parse(monthTxt.substring(47).slice(0, -2));
+                document.getElementById('month-display').innerText = monthJson.table.rows[0]?.c[0]?.v || "N/A";
 
-        // 2. Tab Switcher + Lazy Load + Skeleton Loader Hide
-        function switchTab(id, btnElement) { 
-            playHaptic();
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active-tab')); 
-            
-            const targetContainer = document.getElementById(id);
-            if(!targetContainer) return;
-            
-            targetContainer.classList.add('active');
-            
-            if (!targetContainer.querySelector('iframe')) {
-                const iframe = document.createElement('iframe');
-                iframe.src = targetContainer.getAttribute('data-src');
-                iframe.onload = () => {
-                    const loader = targetContainer.querySelector('.skeleton-loader');
-                    if (loader) loader.style.display = 'none';
-                };
-                targetContainer.appendChild(iframe);
-            } else {
-                const loader = targetContainer.querySelector('.skeleton-loader');
-                if (loader) loader.style.display = 'none';
-            }
-            
-            if (btnElement) btnElement.classList.add('active-tab');
-            localStorage.setItem('activeTab', id); 
-        }
-
-        // 3. Screen Wake Lock API
-        async function requestWakeLock() {
-            try { if ('wakeLock' in navigator) await navigator.wakeLock.request('screen'); } catch (err) {}
-        }
-
-        // 4. Custom Context Menu
-        window.addEventListener('contextmenu', (e) => {
-            e.preventDefault();
-            const menu = document.getElementById('custom-context-menu');
-            menu.style.top = `${e.clientY}px`;
-            menu.style.left = `${e.clientX}px`;
-            menu.style.display = 'block';
-        });
-        window.addEventListener('click', () => { document.getElementById('custom-context-menu').style.display = 'none'; });
-
-        // 5. Native Share API
-        async function sharePortal() {
-            playHaptic();
-            if (navigator.share) {
-                try {
-                    await navigator.share({ title: 'FTCF Portal', text: 'Family Trust Portal', url: window.location.href });
-                } catch(e) {}
-            } else {
-                copyToClipboard(window.location.href);
+                // Fetch Members
+                const dataRes = await fetch(`${BASE_URL}&range=A2:E100`);
+                const dataTxt = await dataRes.text();
+                const dataJson = JSON.parse(dataTxt.substring(47).slice(0, -2));
+                renderMembers(dataJson.table.rows);
+            } catch (err) {
+                document.getElementById('member-list').innerHTML = "<p class='text-center text-xs text-rose-400 font-bold py-6'>Error: Sheet access denied.</p>";
             }
         }
 
-        // 6. Quick Copy
-        function copyToClipboard(text) {
-            playHaptic();
-            navigator.clipboard.writeText(text);
-            alert('Copied to clipboard!');
-        }
+        function renderMembers(rows) {
+            const list = document.getElementById('member-list');
+            list.innerHTML = '';
+            let total = 0;
+            let paidNum = 0;
+            let unpaidNum = 0;
+            let totalMembers = 0;
 
-        // 7. Privacy Masking Toggle
-        function togglePrivacy() {
-            playHaptic();
-            document.body.classList.toggle('privacy-masked');
-            const icon = document.getElementById('privacyIcon');
-            if (document.body.classList.contains('privacy-masked')) {
-                icon.className = 'fas fa-eye-slash text-amber-500';
-            } else {
-                icon.className = 'fas fa-eye';
-            }
-        }
+            rows.forEach(row => {
+                if(!row.c[0]) return;
+                totalMembers++;
+                const name = row.c[0].v;
+                const amount = row.c[1]?.v || 0;
+                const status = row.c[2]?.v || "UNPAID";
+                
+                const isPaid = status.toUpperCase() === 'PAID';
+                if(isPaid) {
+                    total += amount;
+                    paidNum++;
+                } else {
+                    unpaidNum++;
+                }
 
-        // 8. Notice Speech Synthesizer (Audio Notice)
-        function playNoticeAudio() {
-            playHaptic();
-            const text = document.getElementById('notice-text').innerText;
-            if ('speechSynthesis' in window) {
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'ur-PK';
-                window.speechSynthesis.speak(utterance);
-            }
-        }
-
-        // 9. Modals Control
-        function toggleModal(modalId, show) {
-            playHaptic();
-            document.getElementById(modalId).classList.toggle('hidden', !show);
-        }
-
-        // 10. Ping & Latency Detector
-        function updatePing() {
-            const start = Date.now();
-            fetch(window.location.href, { method: 'HEAD', cache: 'no-store' }).then(() => {
-                const ping = Date.now() - start;
-                document.getElementById('ping-text').innerText = `${ping} ms`;
-            }).catch(() => {
-                document.getElementById('ping-text').innerText = 'Online';
+                const card = document.createElement('div');
+                card.className = "glass-card p-3 rounded-2xl flex items-center justify-between";
+                card.innerHTML = `
+                    <div class="flex items-center gap-3 min-w-0 pr-2">
+                        <div class="w-10 h-10 rounded-full bg-emerald-950 text-teal-300 flex items-center justify-center font-bold text-xs shrink-0 shadow-sm border border-teal-500/40">
+                            ${name.charAt(0)}
+                        </div>
+                        <div class="min-w-0">
+                            <h4 class="font-bold text-slate-100 text-xs truncate uppercase tracking-wide">${name}</h4>
+                            <p class="text-[9px] font-semibold text-slate-400 uppercase tracking-wider">Trust Member</p>
+                        </div>
+                    </div>
+                    <div class="text-right shrink-0">
+                        <p class="font-black text-teal-300 text-xs">Rs. ${amount.toLocaleString()}</p>
+                        <span class="inline-block text-[9px] px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider mt-0.5 ${isPaid ? 'bg-teal-950 text-teal-300 border border-teal-500/40 shadow-inner' : 'bg-rose-950 text-rose-300 border border-rose-500/40 shadow-inner'}">
+                            ${status}
+                        </span>
+                    </div>
+                `;
+                list.appendChild(card);
             });
+
+            document.getElementById('total-collection').innerText = `Rs. ${total.toLocaleString()}`;
+            document.getElementById('paid-count').innerText = paidNum;
+            document.getElementById('unpaid-count').innerText = unpaidNum;
+
+            // Target Progress Calculation (Target = Total Members * Rs. 500)
+            const targetAmount = totalMembers > 0 ? totalMembers * 500 : 10000;
+            const percentage = Math.min(Math.round((total / targetAmount) * 100), 100);
+            
+            document.getElementById('target-percent').innerText = `${percentage}% (${total.toLocaleString()}/${targetAmount.toLocaleString()})`;
+            document.getElementById('progress-bar-fill').style.width = `${percentage}%`;
         }
 
-        // 11. Chart.js Integration
-        function initChart() {
-            const canvas = document.getElementById('overviewChart');
-            if(!canvas) return;
-            const ctx = canvas.getContext('2d');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                    datasets: [{
-                        label: 'Fund Reserve',
-                        data: [50000, 65000, 80000, 95000, 110000, 125000],
-                        borderColor: '#f59e0b',
-                        tension: 0.4,
-                        fill: false
-                    }]
-                },
-                options: {
-                 
+        loadDashboardData();
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            document.querySelectorAll('#member-list > div').forEach(card => {
+                const name = card.querySelector('h4').innerText.toLowerCase();
+                card.style.display = name.includes(term) ? 'flex' : 'none';
+            });
+        });
+    </script>
+</body>
+</html>
+
