@@ -343,7 +343,8 @@
             document.getElementById('progress-bar-fill').style.width = `${percentage}%`;
         }
 
-        loadData();
+        // Correct function call restored here
+        loadDashboardData();
 
         document.getElementById('searchInput').addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase();
