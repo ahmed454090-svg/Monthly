@@ -1,483 +1,459 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ur" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FTCF | Monthly collection</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mughal Foods | Premium Fast Food & Delivery</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { 50: '#fff7ed', 100: '#ffedd5', 500: '#f97316', 600: '#ea580c', 700: '#c2410c' }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: #030712; 
-            color: #f8fafc;
-            min-height: 100vh;
-            overflow-x: hidden;
-            transition: background-color 0.8s ease;
-        }
-
-        .ambient-glow-1 {
-            position: fixed;
-            top: -120px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 450px;
-            height: 450px;
-            background: radial-gradient(circle, rgba(16, 185, 129, 0.25) 0%, rgba(6, 182, 212, 0.1) 40%, rgba(0,0,0,0) 70%);
-            pointer-events: none;
-            z-index: 0;
-            filter: blur(50px);
-        }
-
-        .ambient-glow-2 {
-            position: fixed;
-            top: 250px;
-            right: -120px;
-            width: 350px;
-            height: 350px;
-            background: radial-gradient(circle, rgba(6, 182, 212, 0.2) 0%, rgba(16, 185, 129, 0.05) 50%, rgba(0,0,0,0) 70%);
-            pointer-events: none;
-            z-index: 0;
-            filter: blur(40px);
-        }
-
-        .bank-gradient { 
-            background: linear-gradient(135deg, rgba(6, 78, 59, 0.7) 0%, rgba(15, 23, 42, 0.9) 100%);
-            border: 1px solid rgba(52, 211, 153, 0.4);
-            box-shadow: 0 10px 35px -5px rgba(16, 185, 129, 0.25), 0 0 20px rgba(6, 182, 212, 0.15);
-            position: relative;
-            overflow: hidden;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-        }
-
-        .bank-gradient::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(52, 211, 153, 0.9), rgba(6, 182, 212, 0.8), transparent);
-        }
-
-        .glass-card { 
-            background: rgba(15, 23, 42, 0.75); 
-            backdrop-filter: blur(24px); 
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .glass-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.6), 0 0 15px rgba(16, 185, 129, 0.2);
-            border-color: rgba(52, 211, 153, 0.4);
-        }
-
-        .split-tier-card {
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            background: rgba(15, 23, 42, 0.65);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 1.25rem;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-        }
-
-        .split-tier-card:hover {
-            transform: translateY(-2px);
-            border-color: rgba(52, 211, 153, 0.5);
-            box-shadow: 0 12px 30px -5px rgba(0, 0, 0, 0.6), 0 0 20px rgba(16, 185, 129, 0.25);
-        }
-
-        .split-tier-card .bottom-tier {
-            background: rgba(3, 7, 18, 0.75);
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .progress-fill {
-            transition: width 1s ease-in-out;
-            box-shadow: 0 0 12px rgba(52, 211, 153, 0.6);
-        }
-
-        .skeleton {
-            background: linear-gradient(90deg, #0f172a 25%, #1e293b 50%, #0f172a 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-
-        .pulse-dot {
-            width: 7px;
-            height: 7px;
-            background-color: #34d399;
-            border-radius: 50%;
-            box-shadow: 0 0 12px #34d399;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.8); }
-            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(52, 211, 153, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); }
-        }
-
-        #member-list::-webkit-scrollbar { width: 4px; }
-        #member-list::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .glass-header { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; }
     </style>
 </head>
-<body class="pb-8 relative antialiased selection:bg-emerald-900 selection:text-emerald-200">
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors duration-300 min-h-screen flex flex-col">
 
-    <div class="ambient-glow-1"></div>
-    <div class="ambient-glow-2"></div>
-
-    <main class="w-full max-w-md mx-auto px-4 pt-5 space-y-5 relative z-20">
-
-        <!-- Top App Bar -->
-        <header class="flex justify-between items-center px-1">
-            <div class="flex items-center gap-2">
-                <div class="w-9 h-9 rounded-xl bg-slate-950/80 text-emerald-400 flex items-center justify-center font-black text-xs shadow-md border border-emerald-500/30 backdrop-blur-md">
-                    FT
+    <!-- Navbar -->
+    <header class="sticky top-0 z-40 glass-header bg-white/80 dark:bg-slate-900/80 border-b border-slate-200 dark:border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3 space-x-reverse">
+                <div class="w-12 h-12 bg-gradient-to-tr from-orange-600 to-amber-500 rounded-2xl flex items-center justify-center shadow-lg shadow-orange-500/20 text-white text-2xl font-black">
+                    M
                 </div>
                 <div>
-                    <h1 class="text-xs font-black uppercase tracking-wider text-slate-100">Family Trust</h1>
-                    <p class="text-[9px] font-bold text-slate-400">Secure Ledger</p>
+                    <h1 class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-orange-600 via-amber-500 to-orange-500 bg-clip-text text-transparent">MUGHAL FOODS</h1>
+                    <p class="text-xs font-medium text-slate-500 dark:text-slate-400">Taste of Royalty & Freshness</p>
                 </div>
             </div>
-            <div class="flex items-center gap-2">
-                <button onclick="downloadReportCard()" id="downloadBtn" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/40 text-[10px] font-extrabold text-emerald-400 hover:bg-emerald-500/20 active:scale-95 transition-all shadow-sm backdrop-blur-md">
-                    <i class="fas fa-download text-[9px]"></i> <span>Report Card</span>
+
+            <div class="flex items-center space-x-3 space-x-reverse">
+                <button id="themeToggleBtn" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-orange-500 flex items-center justify-center transition">
+                    <i id="themeIcon" class="fa-solid fa-moon text-lg"></i>
                 </button>
-                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-950/80 border border-slate-800 shadow-sm text-[10px] font-bold text-slate-300 backdrop-blur-md">
-                    <span class="pulse-dot"></span> <span>Live Sync</span>
-                </div>
-            </div>
-        </header>
-
-        <!-- Executive Hero Banner -->
-        <div class="bank-gradient text-white p-6 rounded-3xl relative">
-            <div class="flex justify-between items-start mb-4">
-                <span class="text-[9px] font-black uppercase tracking-[0.25em] text-emerald-300 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/30 backdrop-blur-md">
-                    Rs. 500 / Member
-                </span>
-                <i class="fas fa-shield-halved text-emerald-400/70 text-sm"></i>
-            </div>
-            
-            <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">Monthly Collection</p>
-            
-            <div class="mt-4 bg-slate-950/60 p-4 rounded-2xl border border-white/10 backdrop-blur-lg space-y-3 shadow-inner">
-                <div class="flex justify-between items-end">
-                    <div>
-                        <p class="text-[9px] uppercase font-bold tracking-widest text-slate-400">Current Period</p>
-                        <p id="month-display" class="font-extrabold text-sm text-slate-100 mt-0.5">
-                            <span class="inline-block h-4 w-20 skeleton rounded"></span>
-                        </p>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-[9px] uppercase font-bold tracking-widest text-slate-400">Total Fund</p>
-                        <p id="total-collection" class="font-black text-2xl text-emerald-400 tracking-tight mt-0.5">Rs. 0</p>
-                    </div>
-                </div>
-
-                <!-- Target Progress Bar -->
-                <div class="pt-2 border-t border-white/10">
-                    <div class="flex justify-between items-center text-[10px] font-bold mb-1.5">
-                        <span class="text-slate-400 uppercase tracking-wider">Target Goal</span>
-                        <span id="target-percent" class="text-emerald-400">0%</span>
-                    </div>
-                    <div class="w-full h-2 bg-slate-950 rounded-full overflow-hidden p-0.5 border border-white/10">
-                        <div id="progress-bar-fill" class="progress-fill h-full bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-400 rounded-full w-0"></div>
-                    </div>
-                </div>
+                <button id="openCartBtn" class="relative px-4 h-10 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-semibold flex items-center space-x-2 space-x-reverse shadow-md shadow-orange-600/30 transition">
+                    <i class="fa-solid fa-cart-shopping text-sm"></i>
+                    <span>Cart</span>
+                    <span id="cartBadge" class="bg-white text-orange-600 text-xs font-bold px-2 py-0.5 rounded-full ml-1 hidden">0</span>
+                </button>
+                <button id="openAdminModalBtn" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-orange-500 flex items-center justify-center transition">
+                    <i class="fa-solid fa-user-shield text-lg"></i>
+                </button>
             </div>
         </div>
+    </header>
 
-        <!-- KPI Metrics Grid -->
-        <div class="grid grid-cols-2 gap-3">
-            <div class="glass-card p-3.5 rounded-2xl flex items-center gap-3 border border-slate-800/80">
-                <div class="w-9 h-9 rounded-xl bg-emerald-950/80 text-emerald-400 flex items-center justify-center font-bold text-xs border border-emerald-500/30 shrink-0 shadow-sm">
-                    <i class="fas fa-check-circle"></i>
-                </div>
-                <div>
-                    <p class="text-[9px] font-bold uppercase tracking-wider text-slate-400">Paid Members</p>
-                    <p id="paid-count" class="text-sm font-extrabold text-slate-100">0</p>
-                </div>
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-orange-600 via-amber-600 to-orange-500 p-8 sm:p-12 text-white shadow-2xl">
+            <div class="relative z-10 max-w-xl space-y-4">
+                <span class="inline-block px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-bold tracking-wider uppercase">Crispy, Hot & Fresh</span>
+                <h2 class="text-3xl sm:text-5xl font-black leading-tight">Order Delicious Fast Food Online</h2>
+                <p class="text-orange-100 text-sm sm:text-base font-medium">Fast home delivery, instant WhatsApp confirmation, and 100% fresh ingredients everyday.</p>
             </div>
-
-            <div class="glass-card p-3.5 rounded-2xl flex items-center gap-3 border border-slate-800/80">
-                <div class="w-9 h-9 rounded-xl bg-rose-950/80 text-rose-400 flex items-center justify-center font-bold text-xs border border-rose-500/30 shrink-0 shadow-sm">
-                    <i class="fas fa-clock"></i>
-                </div>
-                <div>
-                    <p class="text-[9px] font-bold uppercase tracking-wider text-slate-400">Pending</p>
-                    <p id="unpaid-count" class="text-sm font-extrabold text-slate-100">0</p>
-                </div>
-            </div>
+            <i class="fa-solid fa-burger absolute -bottom-6 -right-6 text-9xl text-white/10 pointer-events-none transform -rotate-12"></i>
         </div>
 
-        <!-- Search & Filters -->
-        <section class="space-y-3">
-            <div class="flex justify-between items-center px-1">
-                <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Members Directory</h3>
-                <span class="text-[9px] font-bold text-emerald-400/80 uppercase tracking-wider">Live Status</span>
-            </div>
-
-            <div class="relative">
-                <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
-                <input type="text" id="searchInput" placeholder="Search member name..." 
-                       class="w-full pl-9 pr-4 py-2.5 rounded-2xl bg-slate-950/80 border border-slate-800 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500/80 shadow-inner transition-all backdrop-blur-md">
-            </div>
-
-            <!-- Members List -->
-            <div id="member-list" class="space-y-2.5 max-h-[380px] overflow-y-auto pr-1">
-                <div class="p-4 rounded-2xl bg-slate-900/40 border border-slate-800/80 flex items-center justify-between backdrop-blur-md">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-full skeleton shrink-0"></div>
-                        <div class="space-y-1">
-                            <div class="h-3.5 w-28 skeleton rounded"></div>
-                            <div class="h-2.5 w-16 skeleton rounded"></div>
-                        </div>
-                    </div>
-                    <div class="space-y-1 text-right">
-                        <div class="h-3.5 w-16 skeleton rounded"></div>
-                        <div class="h-3 w-12 skeleton rounded ml-auto"></div>
-                    </div>
-                </div>
-            </div>
+        <section class="space-y-4">
+            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Explore Menu Categories</h3>
+            <div id="categoryContainer" class="flex items-center space-x-3 space-x-reverse overflow-x-auto custom-scrollbar pb-2"></div>
         </section>
 
-             <!-- Footer -->
-        <div class="text-center opacity-40 text-[9px] font-black uppercase tracking-[0.25em] pt-2 text-slate-500">
-            @FTCF2026 Founder Mughal Brothers
-        </div>
+        <section class="space-y-4">
+            <div class="flex items-center justify-between">
+                <h3 id="currentCategoryTitle" class="text-xl font-extrabold text-slate-900 dark:text-slate-100">All Items</h3>
+                <span id="itemCountTag" class="text-xs font-semibold px-3 py-1 bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-full">0 Items</span>
+            </div>
+            <div id="menuGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+        </section>
     </main>
 
-    <!-- Executive Modern White-Theme Report Card Template -->
-    <div id="downloadReportModal" style="position: fixed; left: -9999px; top: 0; width: 500px; background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); color: #0f172a; font-family: 'Plus Jakarta Sans', sans-serif; padding: 32px; border-radius: 28px; border: 1px solid #cbd5e1; box-shadow: 0 25px 50px rgba(0,0,0,0.15);">
-        
-        <!-- Header Banner Design -->
-        <div style="background: linear-gradient(135deg, #064e3b 0%, #0f172a 100%); color: #ffffff; padding: 20px; border-radius: 20px; margin-bottom: 20px; position: relative; overflow: hidden;">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <div style="width: 38px; height: 38px; background: #10b981; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 13px; border-radius: 10px;">FT</div>
-                    <div>
-                        <h2 style="font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin: 0;">Family Trust & Care Foundation</h2>
-                        <p style="font-size: 9px; font-weight: 700; color: #34d399; margin: 0; text-transform: uppercase; letter-spacing: 0.1em;">Official Executive Report Card</p>
+    <!-- Cart Drawer -->
+    <div id="cartDrawer" class="fixed inset-0 z-50 overflow-hidden pointer-events-none transition-opacity duration-300 opacity-0">
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm pointer-events-auto" id="closeCartOverlay"></div>
+        <div class="fixed inset-y-0 right-0 max-w-full flex pl-10 pointer-events-auto">
+            <div class="w-screen max-w-md bg-white dark:bg-slate-900 shadow-2xl flex flex-col transform transition-transform duration-300 translate-x-full" id="cartContainer">
+                <div class="px-6 py-6 bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                    <div class="flex items-center space-x-2 space-x-reverse">
+                        <i class="fa-solid fa-bag-shopping text-orange-500 text-xl"></i>
+                        <h2 class="text-lg font-bold text-slate-900 dark:text-white">Your Order</h2>
                     </div>
+                    <button id="closeCartBtn" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xl"><i class="fa-solid fa-xmark"></i></button>
                 </div>
-                <span id="reportModalMonth" style="background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); font-size: 10px; font-weight: 800; padding: 4px 12px; border-radius: 20px; text-transform: uppercase;">--</span>
-            </div>
-
-            <div style="display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 12px; margin-top: 8px;">
-                <div>
-                    <span style="font-size: 8px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.1em;">Total Collection Fund</span>
-                    <h3 id="reportModalTotal" style="font-size: 20px; font-weight: 900; color: #34d399; margin: 2px 0 0 0;">Rs. 0</h3>
-                </div>
-                <div style="display: flex; gap: 12px; text-align: right;">
-                    <div>
-                        <span style="font-size: 8px; font-weight: 700; color: #94a3b8; text-transform: uppercase;">Paid</span>
-                        <p id="reportModalPaid" style="font-size: 13px; font-weight: 800; color: #ffffff; margin: 0;">0</p>
+                <div id="cartItemsList" class="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar"></div>
+                <div class="p-6 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 space-y-4">
+                    <div class="space-y-2">
+                        <input type="text" id="custName" placeholder="Full Name (پورا نام)" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm outline-none focus:ring-2 focus:ring-orange-500">
+                        <input type="text" id="custPhone" placeholder="WhatsApp Number (موبائل نمبر)" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm outline-none focus:ring-2 focus:ring-orange-500">
+                        <textarea id="custAddress" rows="2" placeholder="Delivery Address (مکمل پتہ)" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm outline-none focus:ring-2 focus:ring-orange-500 resize-none"></textarea>
                     </div>
-                    <div>
-                        <span style="font-size: 8px; font-weight: 700; color: #94a3b8; text-transform: uppercase;">Pending</span>
-                        <p id="reportModalUnpaid" style="font-size: 13px; font-weight: 800; color: #f43f5e; margin: 0;">0</p>
+                    <div class="pt-2 border-t border-slate-200 dark:border-slate-800 space-y-2">
+                        <div class="flex justify-between text-sm text-slate-500"><span>Subtotal</span><span id="cartSubtotal">PKR 0</span></div>
+                        <div class="flex justify-between text-sm text-slate-500"><span>Delivery Fee</span><span class="text-emerald-500 font-semibold">FREE</span></div>
+                        <div class="flex justify-between text-lg font-black text-slate-900 dark:text-white pt-2 border-t"><span>Total</span><span id="cartTotal" class="text-orange-500">PKR 0</span></div>
                     </div>
+                    <button id="checkoutWhatsAppBtn" class="w-full py-3.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold flex items-center justify-center space-x-2 space-x-reverse shadow-lg shadow-emerald-600/30 transition">
+                        <i class="fa-brands fa-whatsapp text-xl"></i><span>Confirm Order via WhatsApp</span>
+                    </button>
                 </div>
             </div>
-        </div>
-
-        <!-- Members Table Style Header -->
-        <div style="margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; padding: 0 4px;">
-            <span style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: #475569; letter-spacing: 0.05em;">Complete Members Directory (<span id="reportModalTotalCount">0</span>)</span>
-            <span style="font-size: 9px; font-weight: 700; color: #059669; text-transform: uppercase;">Verified Ledger</span>
-        </div>
-
-        <!-- Clean Grid List for Members -->
-        <div id="reportModalList" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px;">
-            <!-- Members populated dynamically in 2 neat columns -->
-        </div>
-
-        <!-- Footer Note -->
-        <div style="border-top: 1px solid #cbd5e1; padding-top: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 9px; font-weight: 800; color: #64748b; text-transform: uppercase;">
-            <span>Portal: FTCF Digital System</span>
-            <span>@FTCF2026 Mughal Brothers</span>
         </div>
     </div>
 
+    <!-- Admin Authentication Modal -->
+    <div id="adminAuthModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md transition-opacity duration-300 opacity-0 pointer-events-none">
+        <div class="w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden transform scale-95 transition-transform duration-300" id="adminAuthCard">
+            <div class="p-8 space-y-6 text-center">
+                <div class="w-16 h-16 bg-orange-500/10 text-orange-500 rounded-2xl mx-auto flex items-center justify-center text-2xl font-black"><i class="fa-solid fa-lock"></i></div>
+                <div class="space-y-1">
+                    <h3 class="text-2xl font-extrabold text-slate-900 dark:text-white">Admin Authentication</h3>
+                    <p class="text-xs text-slate-500">Enter access key to manage menu prices</p>
+                </div>
+                <div class="space-y-3">
+                    <input type="password" id="adminPassInput" placeholder="Enter Access Password" class="w-full px-4 py-3.5 text-center text-lg font-bold tracking-widest rounded-2xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 outline-none focus:ring-2 focus:ring-orange-500">
+                    <p id="adminAuthErr" class="text-xs text-rose-500 font-semibold hidden">Invalid Password.</p>
+                </div>
+                <div class="grid grid-cols-2 gap-3 pt-2">
+                    <button id="closeAdminAuthBtn" class="py-3 px-4 rounded-xl border border-slate-300 dark:border-slate-700 font-bold text-sm hover:bg-slate-100 dark:hover:bg-slate-800 transition">Cancel</button>
+                    <button id="verifyAdminPassBtn" class="py-3 px-4 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-bold text-sm shadow-md transition">Verify Access</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <!-- Admin Control Panel Modal -->
+    <div id="adminPanelModal" class="fixed inset-0 z-50 overflow-y-auto bg-slate-950/80 backdrop-blur-md hidden p-4 sm:p-6 lg:p-8">
+        <div class="max-w-4xl mx-auto bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+            <div class="px-6 py-5 bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                <h3 class="text-xl font-extrabold text-slate-900 dark:text-white">Admin Management Dashboard</h3>
+                <button id="closeAdminPanelBtn" class="w-9 h-9 rounded-xl bg-slate-200 dark:bg-slate-700 text-slate-500 hover:text-orange-500 flex items-center justify-center transition"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="p-6 sm:p-8 space-y-8">
+                <div class="space-y-4">
+                    <h4 class="text-lg font-extrabold text-slate-900 dark:text-white">Add New Food Item</h4>
+                    <form id="addItemForm" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <input type="text" id="newItemName" placeholder="Item Name" required class="px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm outline-none">
+                        <select id="newItemCategory" required class="px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm outline-none">
+                            <option value="Burgers">Burgers</option>
+                            <option value="Fish">Fish</option>
+                            <option value="Fries">Fries</option>
+                            <option value="Samosa">Samosa</option>
+                            <option value="Roll">Roll</option>
+                            <option value="Pakory">Pakory</option>
+                            <option value="Roll Paratha">Roll Paratha</option>
+                            <option value="Drinks">Drinks</option>
+                        </select>
+                        <input type="number" id="newItemPrice" placeholder="Price (PKR)" required class="px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm outline-none">
+                        <input type="url" id="newItemImg" placeholder="Image URL" class="px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm outline-none">
+                        <textarea id="newItemDesc" rows="2" placeholder="Description" class="sm:col-span-2 px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm outline-none resize-none"></textarea>
+                        <button type="submit" class="sm:col-span-2 py-3 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-xl text-sm transition">Add Item</button>
+                    </form>
+                </div>
+                <div class="space-y-4">
+                    <h4 class="text-lg font-extrabold text-slate-900 dark:text-white">Manage & Edit Live Prices</h4>
+                    <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800">
+                        <table class="w-full text-left border-collapse text-sm">
+                            <thead class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                                <tr><th class="p-4">Item</th><th class="p-4">Category</th><th class="p-4">Price (PKR)</th><th class="p-4 text-center">Action</th></tr>
+                            </thead>
+                            <tbody id="adminItemTableBody" class="divide-y divide-slate-200 dark:divide-slate-800"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Script -->
     <script>
-        const SHEET_ID = "1hUEigyVt9FcLdeT-2G44mcUMo-r3gSb7AN0XcXilMVw";
-        const BASE_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+        document.addEventListener('DOMContentLoaded', () => {
+            const defaultItems = [
+                { id: '1', name: 'Zinger Burger', category: 'Burgers', price: 380, desc: 'Crispy fried chicken thigh with spicy mayo & lettuce', img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=80' },
+                { id: '2', name: 'Beef Smash Burger', category: 'Burgers', price: 550, desc: 'Double juicy beef patty topped with melted cheese', img: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=500&q=80' },
+                { id: '3', name: 'Crispy Fried Fish (500g)', category: 'Fish', price: 1200, desc: 'Fresh Lahori style spicy fried fish with tartar dip', img: 'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=500&q=80' },
+                { id: '4', name: 'Loaded Fries', category: 'Fries', price: 320, desc: 'Golden fries topped with melted cheese & jalapenos', img: 'https://images.unsplash.com/photo-1576107232684-1279f3908594?auto=format&fit=crop&w=500&q=80' },
+                { id: '5', name: 'Chicken Cheese Roll', category: 'Roll', price: 280, desc: 'Grilled chicken wrapped in crispy paratha', img: 'https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=500&q=80' },
+                { id: '6', name: 'Zinger Roll Paratha', category: 'Roll Paratha', price: 350, desc: 'Crispy zinger strip rolled with garlic sauce', img: 'https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=500&q=80' },
+                { id: '7', name: 'Aloo Samosa (Plate of 2)', category: 'Samosa', price: 80, desc: 'Crispy golden fried potato samosas', img: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=500&q=80' },
+                { id: '8', name: 'Mix Crisp Pakory (250g)', category: 'Pakory', price: 150, desc: 'Traditional spiced crispy onion & potato pakoras', img: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=500&q=80' },
+                { id: '9', name: 'Cold Drink 1.5L', category: 'Drinks', price: 180, desc: 'Chilled Pepsi / Coke / 7Up', img: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=500&q=80' }
+            ];
 
-        let cachedRows = [];
-        let currentMonthText = "";
+            const categories = ['All', 'Burgers', 'Fish', 'Fries', 'Samosa', 'Roll', 'Pakory', 'Roll Paratha', 'Drinks'];
+            let foodItems = JSON.parse(localStorage.getItem('mughal_food_items')) || defaultItems;
+            let cart = [];
+            let activeCategory = 'All';
+            const ADMIN_PASS = '1234';
 
-        async function loadDashboardData() {
-            try {
-                const monthRes = await fetch(`${BASE_URL}&range=H1`);
-                const monthTxt = await monthRes.text();
-                const monthJson = JSON.parse(monthTxt.substring(47).slice(0, -2));
-                currentMonthText = monthJson.table.rows[0]?.c[0]?.v || "N/A";
-                document.getElementById('month-display').innerText = currentMonthText;
+            const categoryContainer = document.getElementById('categoryContainer');
+            const menuGrid = document.getElementById('menuGrid');
+            const itemCountTag = document.getElementById('itemCountTag');
+            const currentCategoryTitle = document.getElementById('currentCategoryTitle');
 
-                const dataRes = await fetch(`${BASE_URL}&range=A2:E50`);
-                const dataTxt = await dataRes.text();
-                const dataJson = JSON.parse(dataTxt.substring(47).slice(0, -2));
-                cachedRows = dataJson.table.rows;
-                renderMembers(cachedRows);
-            } catch (err) {
-                document.getElementById('member-list').innerHTML = "<p class='text-center text-xs text-rose-500 font-bold py-6'>Error: Sheet access denied.</p>";
+            // Render Categories
+            function renderCategories() {
+                categoryContainer.innerHTML = categories.map(cat => `
+                    <button data-category="${cat}" class="cat-btn px-5 py-2.5 rounded-2xl whitespace-nowrap text-xs font-extrabold transition-all duration-200 ${activeCategory === cat ? 'bg-orange-600 text-white shadow-lg shadow-orange-600/30 scale-105' : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-orange-500'}">
+                        ${cat}
+                    </button>
+                `).join('');
+
+                document.querySelectorAll('.cat-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        activeCategory = e.currentTarget.getAttribute('data-category');
+                        currentCategoryTitle.innerText = activeCategory === 'All' ? 'All Items' : activeCategory;
+                        renderCategories();
+                        renderMenu();
+                    });
+                });
             }
-        }
 
-        function renderMembers(rows) {
-            const list = document.getElementById('member-list');
-            list.innerHTML = '';
-            let total = 0;
-            let paidNum = 0;
-            let unpaidNum = 0;
-            let totalMembers = 0;
+            // Render Menu
+            function renderMenu() {
+                const filtered = activeCategory === 'All' ? foodItems : foodItems.filter(i => i.category === activeCategory);
+                itemCountTag.innerText = `${filtered.length} Items`;
 
-            rows.forEach((row, idx) => {
-                if(!row.c[0]) return;
-                totalMembers++;
-                const name = row.c[0].v;
-                const amount = row.c[1]?.v || 0;
-                const status = row.c[2]?.v || "UNPAID";
-                
-                const isPaid = status.toUpperCase() === 'PAID';
-                if(isPaid) {
-                    total += amount;
-                    paidNum++;
-                } else {
-                    unpaidNum++;
+                if (filtered.length === 0) {
+                    menuGrid.innerHTML = `<div class="col-span-full py-12 text-center text-slate-400"><p class="font-medium">No items found.</p></div>`;
+                    return;
                 }
 
-                const card = document.createElement('div');
-                card.className = "split-tier-card cursor-pointer group";
-                card.innerHTML = `
-                    <div class="p-3 flex items-center justify-between">
-                        <div class="flex items-center gap-3 min-w-0 pr-2">
-                            <div class="relative shrink-0">
-                                <div class="w-10 h-10 rounded-xl bg-slate-950 text-emerald-400 flex items-center justify-center font-extrabold text-xs border border-slate-800 group-hover:border-emerald-400/80 transition-all shadow-md">
-                                    ${name.charAt(0)}
-                                </div>
-                                <span class="absolute -bottom-1 -right-1 text-[8px] font-black bg-slate-950 text-emerald-400 border border-emerald-500/30 px-1 rounded-md">
-                                    #${idx + 1}
-                                </span>
+                menuGrid.innerHTML = filtered.map(item => `
+                    <div class="group bg-white dark:bg-slate-900 rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl transition flex flex-col">
+                        <div class="relative h-48 overflow-hidden bg-slate-100 dark:bg-slate-800">
+                            <img src="${item.img}" alt="${item.name}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                            <span class="absolute top-3 right-3 bg-slate-900/80 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase">${item.category}</span>
+                        </div>
+                        <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+                            <div class="space-y-1">
+                                <h4 class="font-extrabold text-base text-slate-900 dark:text-white">${item.name}</h4>
+                                <p class="text-xs text-slate-500 line-clamp-2">${item.desc}</p>
                             </div>
-                            <div class="min-w-0">
-                                <h4 class="font-bold text-slate-100 text-xs truncate uppercase tracking-wide group-hover:text-emerald-300 transition-colors">${name}</h4>
-                                <p class="text-[9px] font-semibold text-slate-400 uppercase tracking-wider">Trust Member</p>
+                            <div class="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800">
+                                <div><span class="text-xs text-slate-400 block">Price</span><span class="text-lg font-black text-orange-600">PKR ${item.price}</span></div>
+                                <button data-id="${item.id}" class="add-cart-btn px-4 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs shadow-md transition flex items-center space-x-1 space-x-reverse">
+                                    <i class="fa-solid fa-plus text-xs"></i><span>Add to Cart</span>
+                                </button>
                             </div>
                         </div>
-                        <span class="inline-block text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider shrink-0 ${isPaid ? 'bg-emerald-950/80 text-emerald-400 border border-emerald-800/60' : 'bg-rose-950/80 text-rose-400 border border-rose-800/60'}">
-                            ${status}
-                        </span>
                     </div>
-                    <div class="bottom-tier px-3.5 py-2 flex items-center justify-between">
-                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Monthly Amount</span>
-                        <span class="text-[12px] font-black text-emerald-400 tracking-tight">
-                            Rs. ${amount.toLocaleString()}
-                        </span>
+                `).join('');
+
+                document.querySelectorAll('.add-cart-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const id = e.currentTarget.getAttribute('data-id');
+                        addToCart(id);
+                    });
+                });
+            }
+
+            function addToCart(id) {
+                const item = foodItems.find(i => i.id === id);
+                const exist = cart.find(c => c.id === id);
+                if (exist) { exist.qty++; } else { cart.push({ ...item, qty: 1 }); }
+                updateCartUI();
+                openCart();
+            }
+
+            function updateCartUI() {
+                const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+                const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+                const cartBadge = document.getElementById('cartBadge');
+                cartBadge.innerText = totalQty;
+                totalQty > 0 ? cartBadge.classList.remove('hidden') : cartBadge.classList.add('hidden');
+
+                document.getElementById('cartSubtotal').innerText = `PKR ${totalPrice}`;
+                document.getElementById('cartTotal').innerText = `PKR ${totalPrice}`;
+
+                const cartItemsList = document.getElementById('cartItemsList');
+                if (cart.length === 0) {
+                    cartItemsList.innerHTML = `<div class="py-16 text-center text-slate-400"><p class="text-sm">Your cart is empty.</p></div>`;
+                    return;
+                }
+
+                cartItemsList.innerHTML = cart.map(item => `
+                    <div class="flex items-center justify-between p-3.5 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border">
+                        <div class="space-y-1">
+                            <h5 class="font-extrabold text-sm text-slate-900 dark:text-white">${item.name}</h5>
+                            <p class="text-xs text-orange-600 font-bold">PKR ${item.price * item.qty}</p>
+                        </div>
+                        <div class="flex items-center space-x-2 space-x-reverse bg-white dark:bg-slate-900 px-2 py-1 rounded-xl border">
+                            <button data-id="${item.id}" data-delta="-1" class="qty-btn w-6 h-6 rounded-lg bg-slate-100 dark:bg-slate-800 font-bold text-xs">-</button>
+                            <span class="text-xs font-extrabold px-1">${item.qty}</span>
+                            <button data-id="${item.id}" data-delta="1" class="qty-btn w-6 h-6 rounded-lg bg-slate-100 dark:bg-slate-800 font-bold text-xs">+</button>
+                        </div>
                     </div>
-                `;
-                list.appendChild(card);
+                `).join('');
+
+                document.querySelectorAll('.qty-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const id = e.target.getAttribute('data-id');
+                        const delta = parseInt(e.target.getAttribute('data-delta'));
+                        changeQty(id, delta);
+                    });
+                });
+            }
+
+            function changeQty(id, delta) {
+                const item = cart.find(c => c.id === id);
+                if (!item) return;
+                item.qty += delta;
+                if (item.qty <= 0) cart = cart.filter(c => c.id !== id);
+                updateCartUI();
+            }
+// Cart Drawer Controls
+            const cartDrawer = document.getElementById('cartDrawer');
+            const cartContainer = document.getElementById('cartContainer');
+
+            function openCart() {
+                cartDrawer.classList.remove('pointer-events-none', 'opacity-0');
+                cartContainer.classList.remove('translate-x-full');
+            }
+            function closeCart() {
+                cartDrawer.classList.add('pointer-events-none', 'opacity-0');
+                cartContainer.classList.add('translate-x-full');
+            }
+
+            document.getElementById('openCartBtn').addEventListener('click', openCart);
+            document.getElementById('closeCartBtn').addEventListener('click', closeCart);
+            document.getElementById('closeCartOverlay').addEventListener('click', closeCart);
+
+            // Theme Toggle
+            document.getElementById('themeToggleBtn').addEventListener('click', () => {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.theme = 'light';
+                    document.getElementById('themeIcon').className = 'fa-solid fa-moon text-lg';
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.theme = 'dark';
+                    document.getElementById('themeIcon').className = 'fa-solid fa-sun text-lg text-amber-400';
+                }
             });
 
-            document.getElementById('total-collection').innerText = `Rs. ${total.toLocaleString()}`;
-            document.getElementById('paid-count').innerText = paidNum;
-            document.getElementById('unpaid-count').innerText = unpaidNum;
+            // WhatsApp Checkout
+            document.getElementById('checkoutWhatsAppBtn').addEventListener('click', () => {
+                if (cart.length === 0) return alert('Please add items to cart.');
+                const name = document.getElementById('custName').value.trim();
+                const phone = document.getElementById('custPhone').value.trim();
+                const address = document.getElementById('custAddress').value.trim();
+                if (!name || !phone || !address) return alert('تمام تفصیلات درج کریں۔');
 
-            const targetAmount = totalMembers > 0 ? totalMembers * 500 : 10000;
-            const percentage = Math.min(Math.round((total / targetAmount) * 100), 100);
-            
-            document.getElementById('target-percent').innerText = `${percentage}% (${total.toLocaleString()}/${targetAmount.toLocaleString()})`;
-            document.getElementById('progress-bar-fill').style.width = `${percentage}%`;
-        }
-
-        loadDashboardData();
-
-        document.getElementById('searchInput').addEventListener('input', (e) => {
-            const term = e.target.value.toLowerCase();
-            document.querySelectorAll('#member-list > div').forEach(card => {
-                const name = card.querySelector('h4').innerText.toLowerCase();
-                card.style.display = name.includes(term) ? 'block' : 'none';
+                let msg = `*NEW ORDER - MUGHAL FOODS*\n\n👤 Name: ${name}\n📞 Phone: ${phone}\n📍 Address: ${address}\n\n*Items:*\n`;
+                cart.forEach((i, idx) => msg += `${idx + 1}. ${i.name} x ${i.qty} = PKR ${i.price * i.qty}\n`);
+                const total = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
+                msg += `\n*Total:* PKR ${total}`;
+                window.open(`https://wa.me/923438800890?text=${encodeURIComponent(msg)}`, '_blank');
             });
+
+            // Admin Modals
+            const adminAuthModal = document.getElementById('adminAuthModal');
+            const adminAuthCard = document.getElementById('adminAuthCard');
+            const adminPanelModal = document.getElementById('adminPanelModal');
+            const adminPassInput = document.getElementById('adminPassInput');
+            const adminAuthErr = document.getElementById('adminAuthErr');
+
+            document.getElementById('openAdminModalBtn').addEventListener('click', () => {
+                adminAuthModal.classList.remove('pointer-events-none', 'opacity-0');
+                adminAuthCard.classList.remove('scale-95');
+                adminPassInput.focus();
+            });
+
+            document.getElementById('closeAdminAuthBtn').addEventListener('click', () => {
+                adminAuthModal.classList.add('pointer-events-none', 'opacity-0');
+                adminAuthCard.classList.add('scale-95');
+                adminPassInput.value = '';
+                adminAuthErr.classList.add('hidden');
+            });
+
+            document.getElementById('verifyAdminPassBtn').addEventListener('click', () => {
+                if (adminPassInput.value === ADMIN_PASS) {
+                    document.getElementById('closeAdminAuthBtn').click();
+                    renderAdminTable();
+                    adminPanelModal.classList.remove('hidden');
+                } else {
+                    adminAuthErr.classList.remove('hidden');
+                }
+            });
+
+            document.getElementById('closeAdminPanelBtn').addEventListener('click', () => {
+                adminPanelModal.classList.add('hidden');
+            });
+
+            function renderAdminTable() {
+                const tbody = document.getElementById('adminItemTableBody');
+                tbody.innerHTML = foodItems.map(item => `
+                    <tr>
+                        <td class="p-4 font-bold">${item.name}</td>
+                        <td class="p-4"><span class="px-2 py-1 bg-slate-200 dark:bg-slate-800 text-xs rounded">${item.category}</span></td>
+                        <td class="p-4"><input type="number" value="${item.price}" data-id="${item.id}" class="price-input w-24 px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 font-bold text-orange-600"></td>
+                        <td class="p-4 text-center"><button data-id="${item.id}" class="del-btn px-2.5 py-1 bg-rose-500/10 text-rose-500 rounded"><i class="fa-solid fa-trash-can"></i></button></td>
+                    </tr>
+                `).join('');
+
+                tbody.querySelectorAll('.price-input').forEach(input => {
+                    input.addEventListener('change', (e) => {
+                        const id = e.target.getAttribute('data-id');
+                        const newPrice = parseFloat(e.target.value) || 0;
+                        const item = foodItems.find(i => i.id === id);
+                        if (item) {
+                            item.price = newPrice;
+                            localStorage.setItem('mughal_food_items', JSON.stringify(foodItems));
+                            renderMenu();
+                        }
+                    });
+                });
+
+                tbody.querySelectorAll('.del-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const id = e.currentTarget.getAttribute('data-id');
+                        if (confirm('Delete item?')) {
+                            foodItems = foodItems.filter(i => i.id !== id);
+                            localStorage.setItem('mughal_food_items', JSON.stringify(foodItems));
+                            renderAdminTable();
+                            renderMenu();
+                        }
+                    });
+                });
+            }
+
+            document.getElementById('addItemForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const newItem = {
+                    id: Date.now().toString(),
+                    name: document.getElementById('newItemName').value.trim(),
+                    category: document.getElementById('newItemCategory').value,
+                    price: parseFloat(document.getElementById('newItemPrice').value) || 0,
+                    img: document.getElementById('newItemImg').value.trim() || 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=80',
+                    desc: document.getElementById('newItemDesc').value.trim() || 'Delicious food item.'
+                };
+                foodItems.push(newItem);
+                localStorage.setItem('mughal_food_items', JSON.stringify(foodItems));
+                renderAdminTable();
+                renderMenu();
+                e.target.reset();
+            });
+
+            renderCategories();
+            renderMenu();
         });
-
-        function downloadReportCard() {
-            const btn = document.getElementById('downloadBtn');
-            const modal = document.getElementById('downloadReportModal');
-            
-            btn.innerHTML = `<i class="fas fa-spinner fa-spin text-[9px]"></i> <span>Generating...</span>`;
-
-            document.getElementById('reportModalMonth').innerText = currentMonthText;
-            
-            let total = 0;
-            let paidNum = 0;
-            let unpaidNum = 0;
-            let modalListHtml = '';
-            let validMemberCount = 0;
-
-            cachedRows.forEach((row, idx) => {
-                if(!row.c[0]) return;
-                validMemberCount++;
-                const name = row.c[0].v;
-                const amount = row.c[1]?.v || 0;
-                const status = row.c[2]?.v || "UNPAID";
-                const isPaid = status.toUpperCase() === 'PAID';
-
-                if(isPaid) {
-                    total += amount;
-                    paidNum++;
-                } else {
-                    unpaidNum++;
-                }
-
-                // 2-Column Clean Modern Card Rows Design
-                modalListHtml += `
-                    <div style="display: flex; justify-content: space-between; align-items: center; background: #ffffff; padding: 8px 10px; border-radius: 8px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                        <div style="display: flex; align-items: center; gap: 6px; min-width: 0;">
-                            <span style="font-size: 8px; font-weight: 800; color: #64748b; background: #f1f5f9; padding: 2px 5px; border-radius: 4px;">#${idx + 1}</span>
-                            <span style="font-size: 10px; font-weight: 700; color: #0f172a; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 90px;">${name}</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 6px; shrink: 0;">
-                            <span style="font-size: 10px; font-weight: 800; color: #059669;">Rs.${amount}</span>
-                            <span style="font-size: 8px; font-weight: 800; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; ${isPaid ? 'background: #d1fae5; color: #065f46;' : 'background: #ffe4e6; color: #9f1239;'}">${status}</span>
-                        </div>
-                    </div>
-                `;
-            });
-
-            document.getElementById('reportModalTotal').innerText = `Rs. ${total.toLocaleString()}`;
-            document.getElementById('reportModalPaid').innerText = paidNum;
-            document.getElementById('reportModalUnpaid').innerText = unpaidNum;
-            document.getElementById('reportModalTotalCount').innerText = validMemberCount;
-            document.getElementById('reportModalList').innerHTML = modalListHtml;
-
-            html2canvas(modal, {
-                scale: 3,
-                useCORS: true,
-                backgroundColor: '#f8fafc'
-            }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = `FTCF_Report_Card_${currentMonthText}.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-                
-                btn.innerHTML = `<i class="fas fa-download text-[9px]"></i> <span>Report Card</span>`;
-            }).catch(err => {
-                console.error(err);
-                btn.innerHTML = `<i class="fas fa-download text-[9px]"></i> <span>Report Card</span>`;
-                alert('Download failed, please try again.');
-            });
-        }
     </script>
 </body>
 </html>
